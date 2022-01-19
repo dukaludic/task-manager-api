@@ -20,20 +20,19 @@ export class UsersController {
 
   @Post()
   async addUser(
-    @Body('user_id') user_id: string,
-    @Body('business_id') business_id: string,
-    @Body('order_id') order_id: string,
-    @Body('receiver') receiver: string,
-    @Body('content') content: string,
-    @Body('user_status') user_status: string,
+    @Body('first_name') first_name: string,
+    @Body('last_name') last_name: string,
+    @Body('email') email: string,
+    @Body('password') password: string,
+    @Body('role') role: string,
   ) {
+    console.log(first_name, last_name, email);
     const result = await this.usersService.insertUser(
-      user_id,
-      business_id,
-      order_id,
-      receiver,
-      content,
-      user_status,
+      first_name,
+      last_name,
+      email,
+      password,
+      role,
     );
     return { id: result };
   }
@@ -46,6 +45,7 @@ export class UsersController {
 
   @Get()
   async getAllUsers(@Request() req) {
+    console.log('getAllUsers');
     const users = await this.usersService.getUsers(5);
     return users;
   }
@@ -55,28 +55,25 @@ export class UsersController {
     return this.usersService.getSingleUser(id, 5);
   }
 
-  // @Put(':id')
-  // async updateUser(
-  //   @Param('id') id: string,
-  //   @Body('unique_user_id') unique_user_id: string,
-  //   @Body('user_id') user_id: string,
-  //   @Body('business_id') business_id: string,
-  //   @Body('order_id') order_id: string,
-  //   @Body('receiver') receiver: string,
-  //   @Body('content') content: string,
-  //   @Body('user_status') user_status: string,
-  // ) {
-  //   const result = await this.usersService.updateUser(
-  //     id,
-  //     user_id,
-  //     business_id,
-  //     order_id,
-  //     receiver,
-  //     content,
-  //     user_status,
-  //   );
-  //   return result;
-  // }
+  @Patch(':id')
+  async updateUser(
+    @Param('id') id: string,
+    @Body('first_name') first_name: string,
+    @Body('last_name') last_name: string,
+    @Body('email') email: string,
+    @Body('password') password: string,
+    @Body('role') role: string,
+  ) {
+    const result = await this.usersService.updateUser(
+      id,
+      first_name,
+      last_name,
+      email,
+      password,
+      role,
+    );
+    return result;
+  }
 
   @Delete(':id')
   async removeUser(@Param('id') id: string) {
