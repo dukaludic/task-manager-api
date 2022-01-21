@@ -11,19 +11,19 @@ import {
   Put,
 } from '@nestjs/common';
 
-import { SubTasksService } from './subTasks.service';
+import { SubtasksService } from './subtasks.service';
 
 @Controller('subtasks')
-export class SubTasksController {
-  constructor(private readonly subTasksService: SubTasksService) {}
+export class SubtasksController {
+  constructor(private readonly subTasksService: SubtasksService) {}
 
   @Post()
-  async addSubTask(
+  async addSubtask(
     @Body('task_id') task_id: string,
     @Body('content') content: string,
     @Body('status') status: boolean,
   ) {
-    const result = await this.subTasksService.insertSubTask(
+    const result = await this.subTasksService.insertSubtask(
       task_id,
       content,
       status,
@@ -32,32 +32,32 @@ export class SubTasksController {
   }
 
   // @Post('/multiple')
-  // async addMultiple(@Body('multipleSubTasks') multipleSubTasks: any) {
-  //   const subTasks = await this.subTasksService.insertBulkSubTasks(multipleSubTasks);
+  // async addMultiple(@Body('multipleSubtasks') multipleSubtasks: any) {
+  //   const subTasks = await this.subTasksService.insertBulkSubtasks(multipleSubtasks);
   //   return subTasks;
   // }
 
   @Get()
-  async getAllSubTasks(@Request() req) {
-    console.log('getAllSubTasks');
-    const subTasks = await this.subTasksService.getSubTasks(5);
+  async getAllSubtasks(@Request() req) {
+    console.log('getAllSubtasks');
+    const subTasks = await this.subTasksService.getSubtasks(5);
     return subTasks;
   }
 
   @Get(':id')
-  getSubTaskSingle(@Param('id') id: string) {
-    return this.subTasksService.getSingleSubTask(id, 5);
+  getSubtaskSingle(@Param('id') id: string) {
+    return this.subTasksService.getSingleSubtask(id, 5);
   }
 
   @Patch(':id')
-  async updateSubTask(
+  async updateSubtask(
     @Param('id') id: string,
     @Body('task_id') task_id: string,
     @Body('content') content: string,
     @Body('status') status: boolean,
   ) {
     console.log(id, '==id');
-    const result = await this.subTasksService.updateSubTask(
+    const result = await this.subTasksService.updateSubtask(
       id,
       task_id,
       content,
@@ -67,8 +67,8 @@ export class SubTasksController {
   }
 
   @Delete(':id')
-  async removeSubTask(@Param('id') id: string) {
-    const result = await this.subTasksService.deleteSubTask(id);
+  async removeSubtask(@Param('id') id: string) {
+    const result = await this.subTasksService.deleteSubtask(id);
     return result;
   }
 }

@@ -10,40 +10,38 @@ import { v4 as uuidv4 } from 'uuid';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { SubTask } from './subTask.model';
+import { Subtask } from './subtask.model';
 
 @Injectable()
-export class SubTasksService {
+export class SubtasksService {
   constructor(
-    @InjectModel('SubTask') private readonly subTaskModel: Model<SubTask>,
+    @InjectModel('Subtask') private readonly subTaskModel: Model<Subtask>,
   ) {}
 
-  async insertSubTask(task_id: string, content: string, status: boolean) {
-    const newSubTask = new this.subTaskModel({
+  async insertSubtask(task_id: string, content: string, status: boolean) {
+    const newSubtask = new this.subTaskModel({
       task_id,
       content,
       status,
     });
 
-    console.log(newSubTask, '===newSubTask');
+    console.log(newSubtask, '===newSubtask');
 
-    const result = await newSubTask.save();
+    const result = await newSubtask.save();
     return result.id as string;
   }
 
-  async insertBulkSubTasks(multipleSubTasks: any[]) {
-    const availabilities = await this.subTaskModel.insertMany(
-      multipleSubTasks,
-    );
+  async insertBulkSubtasks(multipleSubtasks: any[]) {
+    const availabilities = await this.subTaskModel.insertMany(multipleSubtasks);
     return availabilities;
   }
 
-  async getSubTasks(limiter: number) {
+  async getSubtasks(limiter: number) {
     const subTasks = await this.subTaskModel.find().exec();
     return subTasks;
   }
 
-  async getSingleSubTask(id: string, limiter: number) {
+  async getSingleSubtask(id: string, limiter: number) {
     const subTask = await this.subTaskModel
       .findOne({
         id: {
@@ -55,35 +53,35 @@ export class SubTasksService {
     return subTask;
   }
 
-  async updateSubTask(
+  async updateSubtask(
     id: string,
     task_id: string,
     content: string,
     status: boolean,
   ) {
-    const updatedSubTask = await this.findSubTask(id);
+    const updatedSubtask = await this.findSubtask(id);
     if (task_id) {
-      updatedSubTask.task_id = task_id;
+      updatedSubtask.task_id = task_id;
     }
     if (content) {
-      updatedSubTask.content = content;
+      updatedSubtask.content = content;
     }
     if (status || status === false) {
-      updatedSubTask.status = status;
+      updatedSubtask.status = status;
     }
 
-    updatedSubTask.save();
-    return updatedSubTask;
+    updatedSubtask.save();
+    return updatedSubtask;
   }
 
-  async deleteSubTask(subTaskId: string) {
+  async deleteSubtask(subTaskId: string) {
     const result = await this.subTaskModel.deleteOne({ id: subTaskId }).exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
-  private async findSubTask(id: string): Promise<SubTask> {
+  private async findSubtask(id: string): Promise<Subtask> {
     let subTask;
     try {
       subTask = await this.subTaskModel.findById(id).exec();

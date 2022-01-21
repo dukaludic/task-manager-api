@@ -1,16 +1,16 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { SubTaskSchema } from './subTask.model';
-import { SubTasksController } from './subTasks.controller';
-import { SubTasksService } from './subTasks.service';
+import { SubtaskSchema } from './subtask.model';
+import { SubtasksController } from './subtasks.controller';
+import { SubtasksService } from './subtasks.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'SubTask', schema: SubTaskSchema }]),
+    MongooseModule.forFeature([{ name: 'Subtask', schema: SubtaskSchema }]),
   ],
-  controllers: [SubTasksController],
-  providers: [SubTasksService],
-  exports: [SubTasksService],
+  controllers: [SubtasksController],
+  providers: [SubtasksService],
+  exports: [SubtasksService],
 })
-export class SubTasksModule {}
+export class SubtasksModule {}

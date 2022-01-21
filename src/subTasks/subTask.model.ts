@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export const SubTaskSchema = new mongoose.Schema(
+export const SubtaskSchema = new mongoose.Schema(
   {
     task_id: { type: String, required: true },
     content: { type: String, required: true },
@@ -9,7 +9,7 @@ export const SubTaskSchema = new mongoose.Schema(
   { versionKey: false },
 );
 
-export interface SubTask extends mongoose.Document {
+export interface Subtask extends mongoose.Document {
   task_id: string;
   content: string;
   status: boolean;

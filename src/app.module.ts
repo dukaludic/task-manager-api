@@ -6,11 +6,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { UsersModule } from './users/users.module';
 import { ProjectsModule } from './projects/projects.module';
-// import { UsersProjectsModule } from './usersProjects/usersprojects.module';
-// import { UsersassignedModule } from './usersAssigned/usersAssigned.module';
 import { TasksModule } from './tasks/tasks.module';
-import { SubTasksModule } from './subTasks/subTasks.module';
+import { SubtasksModule } from './subtasks/subtasks.module';
 import { BlockersModule } from './blockers/blockers.module';
+import { CommentsModule } from './comments/comments.module';
+import { ImagesModule } from './images/images.module';
+import { ImagesassignedModule } from './imagesassigned/imagesassigned.module';
+import { EventsModule } from './events/events.module';
+import { SettingsModule } from './settings/settings.module';
+import { UsersassignedModule } from './usersassigned/usersassigned.module';
+import { CommentsassignedModule } from './commentsassigned/commentsassigned.module';
 
 @Module({
   imports: [
@@ -19,9 +24,15 @@ import { BlockersModule } from './blockers/blockers.module';
     UsersModule,
     ProjectsModule,
     TasksModule,
-    SubTasksModule,
+    SubtasksModule,
     BlockersModule,
-    // UsersassignedModule,
+    CommentsModule,
+    ImagesModule,
+    ImagesassignedModule,
+    EventsModule,
+    SettingsModule,
+    UsersassignedModule,
+    CommentsassignedModule,
   ],
   controllers: [AppController],
   providers: [AppService],
