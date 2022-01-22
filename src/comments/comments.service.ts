@@ -12,10 +12,14 @@ import { Model } from 'mongoose';
 
 import { Comment } from './comment.model';
 
+import { UsersService } from '../users/users.service';
+
 @Injectable()
 export class CommentsService {
   constructor(
     @InjectModel('Comment') private readonly commentModel: Model<Comment>,
+    @Inject(forwardRef(() => UsersService))
+    private usersService: UsersService,
   ) {}
 
   async insertComment(
@@ -44,6 +48,36 @@ export class CommentsService {
 
   async getComments(limiter: number) {
     const comments = await this.commentModel.find().exec();
+
+    const commentsCollection = [];
+    for (let i = 0; i < comments.length; i++) {
+      const userData = await this.usersService.getSingleUserForComments(
+        comments[i].user_id,
+        5,
+      );
+
+      const data = {
+        id: comments[i]._id,
+        user: userData,
+        data_time: comments[i].date_time,
+        content: comments[i].content,
+        assignment_id: comments[i].assignment_id,
+      };
+      commentsCollection.push(data);
+    }
+
+    return commentsCollection;
+  }
+
+  async findCommentsByAssignmentId(id: string) {
+    const comments = await this.commentModel
+      .find({
+        assignment_id: {
+          $eq: id,
+        },
+      })
+      .exec();
+
     return comments;
   }
 
@@ -56,7 +90,17 @@ export class CommentsService {
       })
       .exec();
 
-    return comment;
+    const userData = await this.usersService.getSingleUser(comment.user_id, 5);
+
+    const data = {
+      id: comment._id,
+      user: userData,
+      data_time: comment.date_time,
+      content: comment.content,
+      assignment_id: comment.assignment_id,
+    };
+
+    return data;
   }
 
   async updateComment(

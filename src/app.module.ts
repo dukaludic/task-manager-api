@@ -14,7 +14,7 @@ import { ImagesModule } from './images/images.module';
 import { ImagesassignedModule } from './imagesassigned/imagesassigned.module';
 import { EventsModule } from './events/events.module';
 import { SettingsModule } from './settings/settings.module';
-import { UsersassignedModule } from './usersassigned/usersassigned.module';
+import { UserprojectModule } from './userproject/userproject.module';
 import { CommentsassignedModule } from './commentsassigned/commentsassigned.module';
 
 @Module({
@@ -31,7 +31,7 @@ import { CommentsassignedModule } from './commentsassigned/commentsassigned.modu
     ImagesassignedModule,
     EventsModule,
     SettingsModule,
-    UsersassignedModule,
+    UserprojectModule,
     CommentsassignedModule,
   ],
   controllers: [AppController],

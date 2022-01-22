@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export const UserassignedSchema = new mongoose.Schema(
+export const UserprojectSchema = new mongoose.Schema(
   {
     project_id: { type: String, required: true },
     user_id: { type: Array, required: true },
@@ -8,7 +8,7 @@ export const UserassignedSchema = new mongoose.Schema(
   { versionKey: false },
 );
 
-export interface Userassigned extends mongoose.Document {
+export interface Userproject extends mongoose.Document {
   project_id: string;
   user_id: string;
 }

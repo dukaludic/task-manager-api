@@ -11,10 +11,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { User } from './user.model';
+import { UserprojectService } from '../userproject/userproject.service';
+import { ProjectsService } from '../projects/projects.service';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+  constructor(
+    @InjectModel('User') private readonly userModel: Model<User>,
+    private userprojectService: UserprojectService,
+    private projectsService: ProjectsService,
+  ) {}
 
   async insertUser(
     first_name: string,
@@ -44,19 +50,124 @@ export class UsersService {
 
   async getUsers(limiter: number) {
     const users = await this.userModel.find().exec();
-    return users;
+
+    const usersCollection = [];
+    for (let i = 0; i < users.length; i++) {
+      const idString = users[i]._id.toString();
+
+      const projectsCollection = [];
+      if (users[i].role === 'worker') {
+        //get intermediary assignment array
+        const userprojects =
+          await this.userprojectService.getUserprojectsPerUserId(idString);
+
+        console.log(userprojects, '===userprojects');
+
+        //get collection
+        for (let i = 0; i < userprojects.length; i++) {
+          console.log(userprojects[i].project_id, 'userprojects[i].project_id');
+          const project = await this.projectsService.getSingleProject(
+            userprojects[i].project_id,
+            5,
+          );
+          projectsCollection.push(project);
+        }
+      } else if (users[i].role === 'project_manager') {
+        const idString = users[i]._id.toString();
+        const projects =
+          await this.projectsService.getProjectsByProjectManagerId(idString, 5);
+        projectsCollection.push([projects]);
+      }
+
+      console.log(projectsCollection, '===projectsCollection');
+
+      const data = {
+        id: users[i]._id,
+        first_name: users[i].first_name,
+        last_name: users[i].last_name,
+        email: users[i].email,
+        password: users[i].password,
+        role: users[i].role,
+        projects: projectsCollection,
+      };
+
+      console.log(data, '===data');
+
+      usersCollection.push(data);
+    }
+
+    return usersCollection;
   }
 
-  async getSingleUser(id: string, limiter: number) {
+  async getSingleUserForComments(id: string, limiter: number) {
     const user = await this.userModel
       .findOne({
-        id: {
+        _id: {
           $eq: id,
         },
       })
       .exec();
 
     return user;
+  }
+
+  async getSingleUserForProjects(id: string, limiter: number) {
+    const user = await this.userModel
+      .findOne({
+        _id: {
+          $eq: id,
+        },
+      })
+      .exec();
+
+    const data = {
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      password: user.password,
+      role: user.role,
+    };
+
+    return data;
+  }
+
+  async getSingleUser(id: string, limiter: number) {
+    const user = await this.userModel
+      .findOne({
+        _id: {
+          $eq: id,
+        },
+      })
+      .exec();
+
+    //get intermediary assignment array
+    const userprojects = await this.userprojectService.getUserprojectsPerUserId(
+      id,
+    );
+
+    console.log(userprojects, '===userprojects');
+
+    //get collection
+    const projectsCollection = [];
+    for (let i = 0; i < userprojects.length; i++) {
+      console.log(userprojects[i].project_id, 'userprojects[i].project_id');
+      const project = await this.projectsService.getSingleProject(
+        userprojects[i].project_id,
+        5,
+      );
+      projectsCollection.push(project);
+    }
+
+    const data = {
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      password: user.password,
+      role: user.role,
+      projects: projectsCollection,
+    };
+
+    return data;
   }
 
   async updateUser(

@@ -15,11 +15,11 @@ import { Subtask } from './subtask.model';
 @Injectable()
 export class SubtasksService {
   constructor(
-    @InjectModel('Subtask') private readonly subTaskModel: Model<Subtask>,
+    @InjectModel('Subtask') private readonly subtaskModel: Model<Subtask>,
   ) {}
 
   async insertSubtask(task_id: string, content: string, status: boolean) {
-    const newSubtask = new this.subTaskModel({
+    const newSubtask = new this.subtaskModel({
       task_id,
       content,
       status,
@@ -32,17 +32,28 @@ export class SubtasksService {
   }
 
   async insertBulkSubtasks(multipleSubtasks: any[]) {
-    const availabilities = await this.subTaskModel.insertMany(multipleSubtasks);
+    const availabilities = await this.subtaskModel.insertMany(multipleSubtasks);
     return availabilities;
   }
 
   async getSubtasks(limiter: number) {
-    const subTasks = await this.subTaskModel.find().exec();
-    return subTasks;
+    const subtasks = await this.subtaskModel.find().exec();
+    return subtasks;
+  }
+
+  async findSubtasksPerTaskId(id) {
+    console.log(id, '==id');
+    const subtasks = await this.subtaskModel.find({
+      task_id: {
+        $eq: id,
+      },
+    });
+
+    return subtasks;
   }
 
   async getSingleSubtask(id: string, limiter: number) {
-    const subTask = await this.subTaskModel
+    const subtask = await this.subtaskModel
       .findOne({
         id: {
           $eq: id,
@@ -50,7 +61,7 @@ export class SubtasksService {
       })
       .exec();
 
-    return subTask;
+    return subtask;
   }
 
   async updateSubtask(
@@ -74,23 +85,23 @@ export class SubtasksService {
     return updatedSubtask;
   }
 
-  async deleteSubtask(subTaskId: string) {
-    const result = await this.subTaskModel.deleteOne({ id: subTaskId }).exec();
+  async deleteSubtask(subtaskId: string) {
+    const result = await this.subtaskModel.deleteOne({ id: subtaskId }).exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
   private async findSubtask(id: string): Promise<Subtask> {
-    let subTask;
+    let subtask;
     try {
-      subTask = await this.subTaskModel.findById(id).exec();
+      subtask = await this.subtaskModel.findById(id).exec();
     } catch (error) {
-      throw new NotFoundException('Could not find subTask.');
+      throw new NotFoundException('Could not find subtask.');
     }
-    if (!subTask) {
-      throw new NotFoundException('Could not find subTask.');
+    if (!subtask) {
+      throw new NotFoundException('Could not find subtask.');
     }
-    return subTask;
+    return subtask;
   }
 }

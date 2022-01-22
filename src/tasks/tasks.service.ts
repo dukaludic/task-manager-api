@@ -11,10 +11,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { Task } from './task.model';
+import { SubtasksService } from 'src/subtasks/subtasks.service';
+import { UsersService } from 'src/users/users.service';
+import { BlockersService } from '../blockers/blockers.service';
 
 @Injectable()
 export class TasksService {
-  constructor(@InjectModel('Task') private readonly taskModel: Model<Task>) {}
+  constructor(
+    @InjectModel('Task') private readonly taskModel: Model<Task>,
+    private subtasksService: SubtasksService,
+    @Inject(forwardRef(() => UsersService))
+    private usersService: UsersService,
+    private blockersService: BlockersService,
+  ) {}
 
   async insertTask(
     title: string,
@@ -46,19 +55,81 @@ export class TasksService {
 
   async getTasks(limiter: number) {
     const tasks = await this.taskModel.find().exec();
-    return tasks;
+
+    const tasksCollection = [];
+    for (let i = 0; i < tasks.length; i++) {
+      const idString = tasks[i]._id.toString();
+      const subtasksCollection =
+        await this.subtasksService.findSubtasksPerTaskId(idString);
+
+      const assignedUsersCollection = [];
+      for (let i = 0; i < tasks[i].assigned_users.length; i++) {
+        const user = await this.usersService.getSingleUserForProjects(
+          tasks[i].assigned_users[i],
+          5,
+        );
+
+        assignedUsersCollection.push(user);
+      }
+
+      const blockersCollection = await this.blockersService.getBlockersByTaskId(
+        idString,
+      );
+
+      const data = {
+        id: tasks[i]._id,
+        title: tasks[i].title,
+        project_id: tasks[i].project_id,
+        assigned_users: assignedUsersCollection,
+        sub_tasks: subtasksCollection,
+        status: tasks[i].status,
+        blockers: blockersCollection,
+      };
+
+      tasksCollection.push(data);
+    }
+
+    return tasksCollection;
   }
 
   async getSingleTask(id: string, limiter: number) {
     const task = await this.taskModel
       .findOne({
-        id: {
+        _id: {
           $eq: id,
         },
       })
       .exec();
 
-    return task;
+    const subtasksCollection = await this.subtasksService.findSubtasksPerTaskId(
+      id,
+    );
+
+    const blockersCollection = await this.blockersService.getBlockersByTaskId(
+      id,
+    );
+
+    const assignedUsersCollection = [];
+    for (let i = 0; i < task.assigned_users.length; i++) {
+      const user = await this.usersService.getSingleUserForProjects(
+        task.assigned_users[i],
+        5,
+      );
+
+      assignedUsersCollection.push(user);
+    }
+
+    const data = {
+      id: task._id,
+      title: task.title,
+      project_id: task.project_id,
+      assigned_users: assignedUsersCollection,
+      sub_tasks: subtasksCollection,
+      status: task.status,
+      blockers: blockersCollection,
+    };
+
+    return data;
   }
 
   async updateTask(

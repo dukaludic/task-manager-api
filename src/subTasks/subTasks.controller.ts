@@ -15,7 +15,7 @@ import { SubtasksService } from './subtasks.service';
 
 @Controller('subtasks')
 export class SubtasksController {
-  constructor(private readonly subTasksService: SubtasksService) {}
+  constructor(private readonly subtasksService: SubtasksService) {}
 
   @Post()
   async addSubtask(
@@ -23,7 +23,7 @@ export class SubtasksController {
     @Body('content') content: string,
     @Body('status') status: boolean,
   ) {
-    const result = await this.subTasksService.insertSubtask(
+    const result = await this.subtasksService.insertSubtask(
       task_id,
       content,
       status,
@@ -33,20 +33,20 @@ export class SubtasksController {
 
   // @Post('/multiple')
   // async addMultiple(@Body('multipleSubtasks') multipleSubtasks: any) {
-  //   const subTasks = await this.subTasksService.insertBulkSubtasks(multipleSubtasks);
-  //   return subTasks;
+  //   const subtasks = await this.subtasksService.insertBulkSubtasks(multipleSubtasks);
+  //   return subtasks;
   // }
 
   @Get()
   async getAllSubtasks(@Request() req) {
     console.log('getAllSubtasks');
-    const subTasks = await this.subTasksService.getSubtasks(5);
-    return subTasks;
+    const subtasks = await this.subtasksService.getSubtasks(5);
+    return subtasks;
   }
 
   @Get(':id')
   getSubtaskSingle(@Param('id') id: string) {
-    return this.subTasksService.getSingleSubtask(id, 5);
+    return this.subtasksService.getSingleSubtask(id, 5);
   }
 
   @Patch(':id')
@@ -57,7 +57,7 @@ export class SubtasksController {
     @Body('status') status: boolean,
   ) {
     console.log(id, '==id');
-    const result = await this.subTasksService.updateSubtask(
+    const result = await this.subtasksService.updateSubtask(
       id,
       task_id,
       content,
@@ -68,7 +68,7 @@ export class SubtasksController {
 
   @Delete(':id')
   async removeSubtask(@Param('id') id: string) {
-    const result = await this.subTasksService.deleteSubtask(id);
+    const result = await this.subtasksService.deleteSubtask(id);
     return result;
   }
 }

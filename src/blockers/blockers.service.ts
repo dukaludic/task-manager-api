@@ -49,6 +49,18 @@ export class BlockersService {
     return blockers;
   }
 
+  async getBlockersByTaskId(id: string) {
+    const blockers = await this.blockerModel
+      .find({
+        task_id: {
+          $eq: id,
+        },
+      })
+      .exec();
+
+    return blockers;
+  }
+
   async getSingleBlocker(id: string, limiter: number) {
     const blocker = await this.blockerModel
       .findOne({
