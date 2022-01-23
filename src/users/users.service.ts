@@ -112,6 +112,7 @@ export class UsersService {
   }
 
   async getSingleUserForProjects(id: string, limiter: number) {
+    console.log(typeof id, '==id 123');
     const user = await this.userModel
       .findOne({
         _id: {
@@ -119,6 +120,8 @@ export class UsersService {
         },
       })
       .exec();
+
+    console.log(user, '===user');
 
     const data = {
       first_name: user.first_name,

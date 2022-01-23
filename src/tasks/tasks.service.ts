@@ -14,6 +14,7 @@ import { Task } from './task.model';
 import { SubtasksService } from 'src/subtasks/subtasks.service';
 import { UsersService } from 'src/users/users.service';
 import { BlockersService } from '../blockers/blockers.service';
+import { CommentsService } from '../comments/comments.service';
 
 @Injectable()
 export class TasksService {
@@ -23,6 +24,7 @@ export class TasksService {
     @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
     private blockersService: BlockersService,
+    private commentsService: CommentsService,
   ) {}
 
   async insertTask(
@@ -76,6 +78,9 @@ export class TasksService {
         idString,
       );
 
+      const commentsCollection =
+        await this.commentsService.findCommentsByAssignmentId(idString);
+
       const data = {
         id: tasks[i]._id,
         title: tasks[i].title,
@@ -84,6 +89,7 @@ export class TasksService {
         sub_tasks: subtasksCollection,
         status: tasks[i].status,
         blockers: blockersCollection,
+        comments: commentsCollection,
       };
 
       tasksCollection.push(data);
@@ -109,6 +115,9 @@ export class TasksService {
       id,
     );
 
+    const commentsCollection =
+      await this.commentsService.findCommentsByAssignmentId(id);
+
     const assignedUsersCollection = [];
     for (let i = 0; i < task.assigned_users.length; i++) {
       const user = await this.usersService.getSingleUserForProjects(
@@ -127,6 +136,7 @@ export class TasksService {
       sub_tasks: subtasksCollection,
       status: task.status,
       blockers: blockersCollection,
+      comments: commentsCollection,
     };
 
     return data;

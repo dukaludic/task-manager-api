@@ -7,6 +7,7 @@ import { TasksService } from './tasks.service';
 import { SubtasksModule } from '../subtasks/subtasks.module';
 import { UsersModule } from '../users/users.module';
 import { BlockersModule } from '../blockers/blockers.module';
+import { CommentsModule } from '../comments/comments.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { BlockersModule } from '../blockers/blockers.module';
     SubtasksModule,
     forwardRef(() => UsersModule),
     BlockersModule,
+    CommentsModule,
   ],
   controllers: [TasksController],
   providers: [TasksService],

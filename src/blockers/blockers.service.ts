@@ -12,10 +12,17 @@ import { Model } from 'mongoose';
 
 import { Blocker } from './blocker.model';
 
+import { UsersService } from '../users/users.service';
+import { CommentsService } from '../comments/comments.service';
+
 @Injectable()
 export class BlockersService {
   constructor(
     @InjectModel('Blocker') private readonly blockerModel: Model<Blocker>,
+    @Inject(forwardRef(() => UsersService))
+    private usersService: UsersService,
+    @Inject(forwardRef(() => CommentsService))
+    private commentsService: CommentsService,
   ) {}
 
   async insertBlocker(
@@ -64,13 +71,30 @@ export class BlockersService {
   async getSingleBlocker(id: string, limiter: number) {
     const blocker = await this.blockerModel
       .findOne({
-        id: {
+        _id: {
           $eq: id,
         },
       })
       .exec();
 
-    return blocker;
+    const userData = await this.usersService.getSingleUserForProjects(
+      blocker.user_id,
+      5,
+    );
+
+    const commentsCollection =
+      await this.commentsService.findCommentsByAssignmentId(id);
+
+    const data = {
+      id: blocker.id,
+      title: blocker.title,
+      task_id: blocker.task_id,
+      description: blocker.description,
+      comments: commentsCollection,
+      user: userData,
+    };
+
+    return data;
   }
 
   async updateBlocker(
