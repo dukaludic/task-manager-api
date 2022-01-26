@@ -48,6 +48,19 @@ export class UsersService {
     return availabilities;
   }
 
+  //For auth
+  async findOne(username: string): Promise<User | undefined> {
+    // return this.users.find((user) => user.username === username);
+
+    const user = this.userModel.findOne({
+      username: {
+        $eq: username,
+      },
+    });
+
+    return user;
+  }
+
   async getUsers(limiter: number) {
     const users = await this.userModel.find().exec();
 

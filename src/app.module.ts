@@ -16,6 +16,7 @@ import { EventsModule } from './events/events.module';
 import { SettingsModule } from './settings/settings.module';
 import { UserprojectModule } from './userproject/userproject.module';
 import { CommentsassignedModule } from './commentsassigned/commentsassigned.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { CommentsassignedModule } from './commentsassigned/commentsassigned.modu
     SettingsModule,
     UserprojectModule,
     CommentsassignedModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,6 +7,7 @@ import { ProjectsService } from './projects.service';
 import { TasksModule } from '../tasks/tasks.module';
 import { UsersModule } from '../users/users.module';
 import { CommentsModule } from '../comments/comments.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { CommentsModule } from '../comments/comments.module';
     TasksModule,
     forwardRef(() => UsersModule),
     forwardRef(() => CommentsModule),
+    AuthModule,
   ],
   controllers: [ProjectsController],
   providers: [ProjectsService],

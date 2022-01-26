@@ -12,7 +12,9 @@ import {
 } from '@nestjs/common';
 
 import { ProjectsService } from './projects.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('projects')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
