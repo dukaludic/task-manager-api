@@ -24,12 +24,14 @@ export class EventsController {
     @Body('operation') operation: string,
     @Body('date_time') date_time: Date,
     @Body('event_target_id') event_target_id: string,
+    @Body('event_target_type') event_target_type: string,
   ) {
     const result = await this.eventsService.insertEvent(
       user_id,
       operation,
       date_time,
       event_target_id,
+      event_target_type
     );
     return { id: result };
   }
@@ -59,6 +61,7 @@ export class EventsController {
     @Body('operation') operation: string,
     @Body('date_time') date_time: Date,
     @Body('event_target_id') event_target_id: string,
+    @Body('event_target_type') event_target_type: string,
   ) {
     const result = await this.eventsService.updateEvent(
       id,
@@ -66,6 +69,7 @@ export class EventsController {
       operation,
       date_time,
       event_target_id,
+      event_target_type
     );
     return result;
   }

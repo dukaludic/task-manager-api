@@ -68,15 +68,16 @@ export class ProjectsService {
 
       const idString = projects[i]._id.toString();
 
-      const tasksCollection = [];
-      for (let j = 0; j < projects[i].tasks.length; j++) {
-        const task = await this.tasksService.getSingleTask(
-          projects[i].tasks[j],
-          5,
-        );
-        tasksCollection.push(task);
-        console.log(tasksCollection, '===tasksCollection');
-      }
+      const tasksCollection = await this.tasksService.getTasksPerProjectId(
+        projects[i].id,
+      );
+      // for (let j = 0; j < projects[i].tasks.length; j++) {
+      //   const task = await this.tasksService.getTasksPerProjectId(
+      //     projects[i].id,
+      //   );
+      //   tasksCollection.push(task);
+      //   console.log(tasksCollection, '===tasksCollection');
+      // }
 
       const commentsCollection =
         await this.commentsService.findCommentsByAssignmentId(idString);
@@ -91,6 +92,7 @@ export class ProjectsService {
       }
 
       const data = {
+        id: projects[i].id,
         title: projects[i].title,
         tasks: tasksCollection,
         assigned_users: assignedUsersCollection,

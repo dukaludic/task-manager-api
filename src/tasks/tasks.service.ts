@@ -98,6 +98,56 @@ export class TasksService {
     return tasksCollection;
   }
 
+  async getTasksPerProjectId(id: string) {
+    console.log(id, '====getTaskPerProjectId id');
+    const tasks = await this.taskModel
+      .find({
+        project_id: {
+          $eq: id,
+        },
+      })
+      .exec();
+
+    const tasksCollection = [];
+    for (let i = 0; i < tasks.length; i++) {
+      const idString = tasks[i]._id.toString();
+      const subtasksCollection =
+        await this.subtasksService.findSubtasksPerTaskId(idString);
+
+      const assignedUsersCollection = [];
+      for (let i = 0; i < tasks[i].assigned_users.length; i++) {
+        const user = await this.usersService.getSingleUserForProjects(
+          tasks[i].assigned_users[i],
+          5,
+        );
+
+        assignedUsersCollection.push(user);
+      }
+
+      const blockersCollection = await this.blockersService.getBlockersByTaskId(
+        idString,
+      );
+
+      const commentsCollection =
+        await this.commentsService.findCommentsByAssignmentId(idString);
+
+      const data = {
+        id: tasks[i]._id,
+        title: tasks[i].title,
+        project_id: tasks[i].project_id,
+        assigned_users: assignedUsersCollection,
+        sub_tasks: subtasksCollection,
+        status: tasks[i].status,
+        blockers: blockersCollection,
+        comments: commentsCollection,
+      };
+
+      tasksCollection.push(data);
+    }
+
+    return tasksCollection;
+  }
+
   async getSingleTask(id: string, limiter: number) {
     const task = await this.taskModel
       .findOne({
