@@ -13,12 +13,20 @@ import { Model } from 'mongoose';
 import { Event } from './event.model';
 
 import { UsersService } from '../users/users.service';
+import { CommentsService } from '../comments/comments.service';
+import { ProjectsService } from '../projects/projects.service';
+import { TasksService } from 'src/tasks/tasks.service';
+import { BlockersService } from 'src/blockers/blockers.service';
 
 @Injectable()
 export class EventsService {
   constructor(
     @InjectModel('Event') private readonly eventModel: Model<Event>,
     private usersService: UsersService,
+    private commentsService: CommentsService,
+    private projectsService: ProjectsService,
+    private blockersService: BlockersService,
+    private tasksService: TasksService,
   ) {}
 
   async insertEvent(
@@ -58,29 +66,28 @@ export class EventsService {
       );
 
       //Get event target data
-      // switch (events[i].event_target_type) {
-      //   case 'comment':
-      //     const eventTargetData = await this.commentsService.getSingleComment();
-      //     break;
-      //   case 'project':
-      //     break;
-      //   case 'task':
-      //     break;
-      //   case 'user':
-      //     break;
-      //   case 'blocker':
-      //     break;
+      let eventTargetData;
 
-      //   default:
-      //     break;
-      // }
+      switch (events[i].event_target_type) {
+        case 'comment':
+          eventTargetData = await this.commentsService.getSingleComment(
+            events[i].event_target_id,
+            5,
+          );
+          break;
+
+        default:
+          break;
+      }
+
+      // const eventTargetData =
 
       const data = {
         id: events[i].id,
-        user_id: userData,
+        user: userData,
         operation: events[i].operation,
         date_time: events[i].date_time,
-        event_target_id: events[i].event_target_id,
+        event_target: eventTargetData,
         event_target_type: events[i].event_target_type,
       };
       eventsCollection.push(data);

@@ -14,7 +14,7 @@ import { AuthModule } from 'src/auth/auth.module';
     MongooseModule.forFeature([{ name: 'Project', schema: ProjectSchema }]),
     TasksModule,
     forwardRef(() => UsersModule),
-    forwardRef(() => CommentsModule),
+    CommentsModule,
     AuthModule,
   ],
   controllers: [ProjectsController],
