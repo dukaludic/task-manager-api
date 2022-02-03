@@ -25,6 +25,7 @@ export class TasksController {
     @Body('project_manager_id') project_manager_id: string,
     @Body('sub_tasks') sub_tasks: string[],
     @Body('status') status: string,
+    @Body('description') description: string,
   ) {
     const result = await this.tasksService.insertTask(
       title,
@@ -33,6 +34,7 @@ export class TasksController {
       project_manager_id,
       sub_tasks,
       status,
+      description,
     );
     return { id: result };
   }
@@ -64,6 +66,7 @@ export class TasksController {
     @Body('project_manager_id') project_manager_id: string,
     @Body('sub_tasks') sub_tasks: string[],
     @Body('status') status: string,
+    @Body('description') description: string,
   ) {
     console.log(id, '==id');
     const result = await this.tasksService.updateTask(
@@ -74,6 +77,7 @@ export class TasksController {
       project_manager_id,
       sub_tasks,
       status,
+      description,
     );
     return result;
   }

@@ -5,13 +5,15 @@ export const TaskSchema = new mongoose.Schema(
     title: { type: String, required: true },
     project_id: { type: String, required: true },
     assigned_users: { type: Array, required: true },
-    project_manager_id: { type: String, required: true },
+
+    project_manager_id: { type: String, required: false },
     sub_tasks: { type: Array, required: true },
     status: {
       type: String,
       enum: ['to_do', 'in_progress', 'in_review', 'done'],
       required: true,
     },
+    description: { type: String, required: false },
   },
   { versionKey: false },
 );
@@ -23,4 +25,5 @@ export interface Task extends mongoose.Document {
   project_manager_id: string;
   sub_tasks: string[];
   status: string;
+  description: string;
 }

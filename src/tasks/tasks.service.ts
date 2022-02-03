@@ -34,6 +34,7 @@ export class TasksService {
     project_manager_id: string,
     sub_tasks: string[],
     status: string,
+    description: string
   ) {
     const newTask = new this.taskModel({
       title,
@@ -42,6 +43,7 @@ export class TasksService {
       project_manager_id,
       sub_tasks,
       status,
+      description
     });
 
     console.log(newTask, '===newTask');
@@ -90,6 +92,7 @@ export class TasksService {
         status: tasks[i].status,
         blockers: blockersCollection,
         comments: commentsCollection,
+        description:tasks[i].description
       };
 
       tasksCollection.push(data);
@@ -140,6 +143,7 @@ export class TasksService {
         status: tasks[i].status,
         blockers: blockersCollection,
         comments: commentsCollection,
+        description: tasks[i].description
       };
 
       tasksCollection.push(data);
@@ -187,6 +191,7 @@ export class TasksService {
       status: task.status,
       blockers: blockersCollection,
       comments: commentsCollection,
+      description: task.description,
     };
 
     return data;
@@ -200,6 +205,7 @@ export class TasksService {
     project_manager_id: string,
     sub_tasks: string[],
     status: string,
+    description: string
   ) {
     const updatedTask = await this.findTask(id);
     if (title) {
@@ -219,6 +225,9 @@ export class TasksService {
     }
     if (status) {
       updatedTask.status = status;
+    }
+    if (description) {
+      updatedTask.description = description;
     }
 
     updatedTask.save();

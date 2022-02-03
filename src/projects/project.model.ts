@@ -8,6 +8,8 @@ export const ProjectSchema = new mongoose.Schema(
     assigned_users: { type: Array, required: true },
     start_date: { type: Date, required: true },
     end_date: { type: Date, required: true },
+    status: { type: String, enum: ['in_progress', 'finished'], required: true },
+    description: { type: String, required: true },
   },
   { versionKey: false },
 );
@@ -19,4 +21,6 @@ export interface Project extends mongoose.Document {
   assigned_users: string[];
   start_date: Date;
   end_date: Date;
+  status: string;
+  description: string;
 }

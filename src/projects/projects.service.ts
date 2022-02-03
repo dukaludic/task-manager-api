@@ -34,6 +34,8 @@ export class ProjectsService {
     assigned_users: string[],
     start_date: Date,
     end_date: Date,
+    status: string,
+    description: string,
   ) {
     const newProject = new this.projectModel({
       title,
@@ -42,6 +44,8 @@ export class ProjectsService {
       assigned_users,
       start_date,
       end_date,
+      status,
+      description,
     });
 
     console.log(newProject, '===newProject');
@@ -99,6 +103,8 @@ export class ProjectsService {
         start_date: projects[i].start_date,
         end_date: projects[i].end_date,
         comments: commentsCollection,
+        status: projects[i].status,
+        description: projects[i].description,
       };
 
       projectsCollection.push(data);
@@ -150,6 +156,8 @@ export class ProjectsService {
         assigned_users: assignedUsersCollection,
         start_date: projects[i].start_date,
         end_date: projects[i].end_date,
+        status: projects[i].status,
+        description: projects[i].description,
       };
 
       projectsCollection.push(data);
@@ -202,6 +210,8 @@ export class ProjectsService {
       assigned_users: assignedUsersCollection,
       start_date: project.start_date,
       end_date: project.end_date,
+      status: project.status,
+      description: project.description,
     };
 
     return data;
@@ -215,6 +225,8 @@ export class ProjectsService {
     assigned_users: string[],
     start_date: Date,
     end_date: Date,
+    status: string,
+    description: string,
   ) {
     const updatedProject = await this.findProject(id);
     if (title) {
@@ -234,6 +246,12 @@ export class ProjectsService {
     }
     if (end_date) {
       updatedProject.end_date = end_date;
+    }
+    if (status) {
+      updatedProject.status = status;
+    }
+    if (description) {
+      updatedProject.description = description;
     }
 
     updatedProject.save();

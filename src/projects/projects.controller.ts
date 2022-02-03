@@ -27,6 +27,8 @@ export class ProjectsController {
     @Body('assigned_users') assigned_users: string[],
     @Body('start_date') start_date: Date,
     @Body('end_date') end_date: Date,
+    @Body('status') status: string,
+    @Body('description') description: string,
   ) {
     const result = await this.projectsService.insertProject(
       title,
@@ -35,6 +37,8 @@ export class ProjectsController {
       assigned_users,
       start_date,
       end_date,
+      status,
+      description,
     );
     return { id: result };
   }
@@ -68,6 +72,8 @@ export class ProjectsController {
     @Body('assigned_users') assigned_users: string[],
     @Body('start_date') start_date: Date,
     @Body('end_date') end_date: Date,
+    @Body('status') status: string,
+    @Body('description') description: string,
   ) {
     console.log(id, '==id');
     const result = await this.projectsService.updateProject(
@@ -78,6 +84,8 @@ export class ProjectsController {
       assigned_users,
       start_date,
       end_date,
+      status,
+      description,
     );
     return result;
   }
