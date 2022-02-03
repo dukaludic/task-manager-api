@@ -212,6 +212,7 @@ export class ProjectsService {
       end_date: project.end_date,
       status: project.status,
       description: project.description,
+      comments: commentsCollection,
     };
 
     return data;

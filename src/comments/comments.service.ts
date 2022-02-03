@@ -77,8 +77,23 @@ export class CommentsService {
         },
       })
       .exec();
+    const commentsCollection = [];
+    for (let i = 0; i < comments.length; i++) {
+      const userData = await this.usersService.getSingleUserForComments(
+        comments[i].user_id,
+        10,
+      );
 
-    return comments;
+      const data = {
+        id: comments[i].id,
+        user: userData,
+        date_time: comments[i].date_time,
+        content: comments[i].content,
+      };
+      commentsCollection.push(data);
+    }
+
+    return commentsCollection;
   }
 
   async getSingleComment(id: string, limiter: number) {
