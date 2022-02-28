@@ -12,7 +12,9 @@ export class AuthService {
 
   async validateUser(username: string, password: string): Promise<any> {
     // Find if user in database
-    const user = await this.usersService.findOne(username);
+    const user = await this.usersService.findUserByUsername(username);
+
+    console.log(user, '===user');
 
     // If user exists and passwords match return the user object without the username and password
     if (user && user.password === password) {
@@ -26,8 +28,11 @@ export class AuthService {
 
   async login(user: any) {
     const payload = {
+      id: user.id,
       first_name: user.first_name,
       last_name: user.last_name,
+      role: user.role,
+      username: user.username,
       sub: user.id,
     };
 

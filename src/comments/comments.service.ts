@@ -105,7 +105,10 @@ export class CommentsService {
       })
       .exec();
 
-    const userData = await this.usersService.getSingleUser(comment.user_id, 5);
+    const userData = await this.usersService.getSingleUserForComments(
+      comment.user_id,
+      5,
+    );
 
     const data = {
       id: comment._id,

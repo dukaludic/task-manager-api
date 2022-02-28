@@ -22,6 +22,7 @@ export class UsersController {
   async addUser(
     @Body('first_name') first_name: string,
     @Body('last_name') last_name: string,
+    @Body('username') username: string,
     @Body('email') email: string,
     @Body('password') password: string,
     @Body('role') role: string,
@@ -30,6 +31,7 @@ export class UsersController {
     const result = await this.usersService.insertUser(
       first_name,
       last_name,
+      username,
       email,
       password,
       role,
@@ -60,6 +62,7 @@ export class UsersController {
     @Param('id') id: string,
     @Body('first_name') first_name: string,
     @Body('last_name') last_name: string,
+    @Body('username') username: string,
     @Body('email') email: string,
     @Body('password') password: string,
     @Body('role') role: string,
@@ -68,6 +71,7 @@ export class UsersController {
       id,
       first_name,
       last_name,
+      username,
       email,
       password,
       role,

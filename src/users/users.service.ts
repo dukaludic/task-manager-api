@@ -25,6 +25,7 @@ export class UsersService {
   async insertUser(
     first_name: string,
     last_name: string,
+    username: string,
     email: string,
     password: string,
     role: string,
@@ -32,6 +33,7 @@ export class UsersService {
     const newUser = new this.userModel({
       first_name,
       last_name,
+      username,
       email,
       password,
       role,
@@ -49,14 +51,35 @@ export class UsersService {
   }
 
   //For auth
+  async findUserByUsername(username: string): Promise<User | undefined> {
+    console.log(username, '===username', typeof username);
+
+    const user = await this.userModel
+      .findOne({
+        username: {
+          $eq: username,
+        },
+      })
+      .exec();
+
+    console.log(user, '===user 1');
+
+    return user;
+  }
+
   async findOne(username: string): Promise<User | undefined> {
     // return this.users.find((user) => user.username === username);
 
+    console.log('username', username);
+    const usernameString = username.toString();
+
     const user = this.userModel.findOne({
       username: {
-        $eq: username,
+        $eq: usernameString,
       },
     });
+
+    // console.log(user, '===user in users.service');
 
     return user;
   }
@@ -98,6 +121,7 @@ export class UsersService {
         id: users[i]._id,
         first_name: users[i].first_name,
         last_name: users[i].last_name,
+        username: users[i].username,
         email: users[i].email,
         password: users[i].password,
         role: users[i].role,
@@ -124,6 +148,18 @@ export class UsersService {
     return user;
   }
 
+  async getSingleUserForEvents(id: string, limiter: number) {
+    const user = await this.userModel
+      .findOne({
+        _id: {
+          $eq: id,
+        },
+      })
+      .exec();
+
+    return user;
+  }
+
   async getSingleUserForProjects(id: string, limiter: number) {
     console.log(typeof id, '==id 123');
     const user = await this.userModel
@@ -139,6 +175,7 @@ export class UsersService {
     const data = {
       first_name: user.first_name,
       last_name: user.last_name,
+      username: user.username,
       email: user.email,
       password: user.password,
       role: user.role,
@@ -177,6 +214,7 @@ export class UsersService {
     const data = {
       first_name: user.first_name,
       last_name: user.last_name,
+      username: user.username,
       email: user.email,
       password: user.password,
       role: user.role,
@@ -190,6 +228,7 @@ export class UsersService {
     id: string,
     first_name: string,
     last_name: string,
+    username: string,
     email: string,
     password: string,
     role: string,
@@ -200,6 +239,9 @@ export class UsersService {
     }
     if (last_name) {
       updatedUser.last_name = last_name;
+    }
+    if (username) {
+      updatedUser.username = username;
     }
     if (email) {
       updatedUser.email = email;

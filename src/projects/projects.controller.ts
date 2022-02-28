@@ -54,13 +54,19 @@ export class ProjectsController {
   @Get()
   async getAllProjects(@Request() req) {
     console.log('getAllProjects');
-    const projects = await this.projectsService.getProjects(5);
+    const projects = await this.projectsService.getProjects(10);
+    return projects;
+  }
+
+  @Get('user/:id')
+  async getPerUserId(@Request() req, @Param('id') id: string) {
+    const projects = await this.projectsService.getProjectsPerUserId(id);
     return projects;
   }
 
   @Get(':id')
   getProjectSingle(@Param('id') id: string) {
-    return this.projectsService.getSingleProject(id, 5);
+    return this.projectsService.getSingleProject(id, 10);
   }
 
   @Patch(':id')

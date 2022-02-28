@@ -23,6 +23,9 @@ export class EventsController {
     @Body('user_id') user_id: string,
     @Body('operation') operation: string,
     @Body('date_time') date_time: Date,
+    @Body('event_object_id') event_object_id: string,
+    @Body('event_object_type') event_object_type: string,
+    @Body('event_target_project_id') event_target_project_id: string,
     @Body('event_target_id') event_target_id: string,
     @Body('event_target_type') event_target_type: string,
   ) {
@@ -30,8 +33,11 @@ export class EventsController {
       user_id,
       operation,
       date_time,
+      event_object_id,
+      event_object_type,
+      event_target_project_id,
       event_target_id,
-      event_target_type
+      event_target_type,
     );
     return { id: result };
   }
@@ -49,6 +55,13 @@ export class EventsController {
     return events;
   }
 
+  @Get('user/:id')
+  async getPerUserId(@Request() req, @Param('id') id: string) {
+    console.log('getAllEvents');
+    const events = await this.eventsService.getEventsPerUserId(id);
+    return events;
+  }
+
   @Get(':id')
   getEventSingle(@Param('id') id: string) {
     return this.eventsService.getSingleEvent(id, 5);
@@ -60,6 +73,9 @@ export class EventsController {
     @Body('user_id') user_id: string,
     @Body('operation') operation: string,
     @Body('date_time') date_time: Date,
+    @Body('event_object_id') event_object_id: string,
+    @Body('event_object_type') event_object_type: string,
+    @Body('event_target_project_id') event_target_project_id: string,
     @Body('event_target_id') event_target_id: string,
     @Body('event_target_type') event_target_type: string,
   ) {
@@ -68,8 +84,11 @@ export class EventsController {
       user_id,
       operation,
       date_time,
+      event_object_id,
+      event_object_type,
+      event_target_project_id,
       event_target_id,
-      event_target_type
+      event_target_type,
     );
     return result;
   }

@@ -112,6 +112,81 @@ export class ProjectsService {
     return projectsCollection;
   }
 
+  //for events
+  async getProjectsIdsPerUserId(id: string) {
+    const projects = await this.projectModel
+      .find({
+        assigned_users: {
+          $in: id,
+        },
+      })
+      .exec();
+
+    const projectIdsCollection = [];
+    for (let i = 0; i < projects.length; i++) {
+      projectIdsCollection.push(projects[i].id);
+    }
+
+    return projectIdsCollection;
+  }
+
+  async getProjectsPerUserId(id: string) {
+    const projects = await this.projectModel
+      .find({
+        assigned_users: {
+          $in: id,
+        },
+      })
+      .exec();
+
+    const projectsCollection = [];
+    for (let i = 0; i < projects.length; i++) {
+      if (projects[i] === null) {
+        continue;
+      }
+
+      const idString = projects[i]._id.toString();
+
+      const tasksCollection = await this.tasksService.getTasksPerProjectId(
+        projects[i].id,
+      );
+      // for (let j = 0; j < projects[i].tasks.length; j++) {
+      //   const task = await this.tasksService.getTasksPerProjectId(
+      //     projects[i].id,
+      //   );
+      //   tasksCollection.push(task);
+      //   console.log(tasksCollection, '===tasksCollection');
+      // }
+
+      const commentsCollection =
+        await this.commentsService.findCommentsByAssignmentId(idString);
+
+      const assignedUsersCollection = [];
+      for (let j = 0; j < projects[i].assigned_users.length; j++) {
+        const user = await this.usersService.getSingleUserForProjects(
+          projects[i].assigned_users[j],
+          5,
+        );
+        assignedUsersCollection.push(user);
+      }
+
+      const data = {
+        id: projects[i].id,
+        title: projects[i].title,
+        tasks: tasksCollection,
+        assigned_users: assignedUsersCollection,
+        start_date: projects[i].start_date,
+        end_date: projects[i].end_date,
+        comments: commentsCollection,
+        status: projects[i].status,
+        description: projects[i].description,
+      };
+
+      projectsCollection.push(data);
+    }
+    return projectsCollection;
+  }
+
   async getProjectsByProjectManagerId(id: string, limiter: number) {
     console.log(id, '===id getProjectsByProjectManagerId');
     const projects = await this.projectModel
