@@ -64,9 +64,14 @@ export class ProjectsController {
     return projects;
   }
 
-  @Get(':id')
+  @Get('single/:id')
   getProjectSingle(@Param('id') id: string) {
     return this.projectsService.getSingleProject(id, 10);
+  }
+
+  @Get('titles')
+  getProjectTitles() {
+    return this.projectsService.getProjectTitles();
   }
 
   @Patch(':id')

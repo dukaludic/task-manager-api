@@ -34,7 +34,9 @@ export class TasksService {
     project_manager_id: string,
     sub_tasks: string[],
     status: string,
-    description: string
+    description: string,
+    created_by: string,
+    creation_time: Date,
   ) {
     const newTask = new this.taskModel({
       title,
@@ -43,7 +45,9 @@ export class TasksService {
       project_manager_id,
       sub_tasks,
       status,
-      description
+      description,
+      created_by,
+      creation_time,
     });
 
     console.log(newTask, '===newTask');
@@ -92,7 +96,9 @@ export class TasksService {
         status: tasks[i].status,
         blockers: blockersCollection,
         comments: commentsCollection,
-        description:tasks[i].description
+        description: tasks[i].description,
+        created_by: tasks[i].created_by,
+        creation_time: tasks[i].creation_time,
       };
 
       tasksCollection.push(data);
@@ -143,7 +149,9 @@ export class TasksService {
         status: tasks[i].status,
         blockers: blockersCollection,
         comments: commentsCollection,
-        description: tasks[i].description
+        description: tasks[i].description,
+        created_by: tasks[i].created_by,
+        creation_time: tasks[i].creation_time,
       };
 
       tasksCollection.push(data);
@@ -192,6 +200,8 @@ export class TasksService {
       blockers: blockersCollection,
       comments: commentsCollection,
       description: task.description,
+      created_by: task.created_by,
+      creation_time: task.creation_time,
     };
 
     return data;
@@ -205,7 +215,9 @@ export class TasksService {
     project_manager_id: string,
     sub_tasks: string[],
     status: string,
-    description: string
+    description: string,
+    created_by: string,
+    creation_time: Date,
   ) {
     const updatedTask = await this.findTask(id);
     if (title) {
@@ -229,16 +241,30 @@ export class TasksService {
     if (description) {
       updatedTask.description = description;
     }
+    if (created_by) {
+      updatedTask.created_by = created_by;
+    }
+    if (creation_time) {
+      updatedTask.creation_time = creation_time;
+    }
 
     updatedTask.save();
     return updatedTask;
   }
 
-  async deleteTask(taskId: string) {
-    const result = await this.taskModel.deleteOne({ id: taskId }).exec();
-    return {
-      message: `Deleted ${result.deletedCount} item from database`,
-    };
+  async deleteTask(id: string) {
+    const result = await this.taskModel
+      .deleteOne({
+        _id: {
+          $eq: id,
+        },
+      })
+      .exec();
+    console.log(result);
+    if (result.deletedCount === 1) {
+      return id;
+    }
+    // return result.id;
   }
 
   private async findTask(id: string): Promise<Task> {

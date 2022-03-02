@@ -130,6 +130,20 @@ export class ProjectsService {
     return projectIdsCollection;
   }
 
+  async getProjectTitles() {
+    const projects = await this.projectModel.find().exec();
+
+    const projectCollection = [];
+    for (let i = 0; i < projects.length; i++) {
+      const project = {
+        id: projects[i].id,
+        title: projects[i].title,
+      };
+      projectCollection.push(project);
+    }
+    return projectCollection;
+  }
+
   async getProjectsPerUserId(id: string) {
     const projects = await this.projectModel
       .find({

@@ -52,6 +52,12 @@ export class UsersController {
     return users;
   }
 
+  @Get('names')
+  async getAllUserNames() {
+    const users = await this.usersService.getUserNames();
+    return users;
+  }
+
   @Get(':id')
   getUserSingle(@Param('id') id: string) {
     return this.usersService.getSingleUser(id, 5);

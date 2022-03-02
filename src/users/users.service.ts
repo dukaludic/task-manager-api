@@ -84,6 +84,21 @@ export class UsersService {
     return user;
   }
 
+  async getUserNames() {
+    const users = await this.userModel.find().exec();
+
+    const usersCollection = [];
+    for (let i = 0; i < users.length; i++) {
+      usersCollection.push({
+        id: users[i].id,
+        first_name: users[i].first_name,
+        last_name: users[i].last_name,
+        role: users[i].role,
+      });
+    }
+    return usersCollection;
+  }
+
   async getUsers(limiter: number) {
     const users = await this.userModel.find().exec();
 

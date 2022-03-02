@@ -14,6 +14,8 @@ export const TaskSchema = new mongoose.Schema(
       required: true,
     },
     description: { type: String, required: false },
+    created_by: { type: String, required: true },
+    creation_time: { type: Date, required: true },
   },
   { versionKey: false },
 );
@@ -26,4 +28,6 @@ export interface Task extends mongoose.Document {
   sub_tasks: string[];
   status: string;
   description: string;
+  created_by: string;
+  creation_time: Date;
 }
