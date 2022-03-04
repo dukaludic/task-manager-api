@@ -13,6 +13,8 @@ import { Model } from 'mongoose';
 import { User } from './user.model';
 import { UserprojectService } from '../userproject/userproject.service';
 import { ProjectsService } from '../projects/projects.service';
+import { ImagesService } from 'src/images/images.service';
+import { ImagesassignedService } from 'src/imagesassigned/imagesassigned.service';
 
 @Injectable()
 export class UsersService {
@@ -20,6 +22,8 @@ export class UsersService {
     @InjectModel('User') private readonly userModel: Model<User>,
     private userprojectService: UserprojectService,
     private projectsService: ProjectsService,
+    private imagesService: ImagesService,
+    private imagesassignedService: ImagesassignedService,
   ) {}
 
   async insertUser(
@@ -29,6 +33,7 @@ export class UsersService {
     email: string,
     password: string,
     role: string,
+    profile_picture: string,
   ) {
     const newUser = new this.userModel({
       first_name,
@@ -37,6 +42,7 @@ export class UsersService {
       email,
       password,
       role,
+      profile_picture,
     });
 
     console.log(newUser, '===newUser');
@@ -141,6 +147,7 @@ export class UsersService {
         password: users[i].password,
         role: users[i].role,
         projects: projectsCollection,
+        profile_picture: users[i].profile_picture,
       };
 
       console.log(data, '===data');
@@ -149,6 +156,37 @@ export class UsersService {
     }
 
     return usersCollection;
+  }
+
+  async getUserBasicInfo(id: string) {
+    const user = await this.userModel
+      .findOne({
+        _id: {
+          $eq: id,
+        },
+      })
+      .exec();
+
+    const profileImageAssigned =
+      await this.imagesassignedService.getSingleImageassignedByAssignmentId(
+        user.id,
+      );
+
+    const profileImage = await this.imagesService.getSingleImage(
+      profileImageAssigned?.image_id,
+    );
+
+    const data = {
+      id: user.id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      profile_picture: profileImage,
+    };
+
+    return data;
   }
 
   async getSingleUserForComments(id: string, limiter: number) {
@@ -234,6 +272,7 @@ export class UsersService {
       password: user.password,
       role: user.role,
       projects: projectsCollection,
+      profile_picture: user.profile_picture,
     };
 
     return data;
@@ -247,6 +286,7 @@ export class UsersService {
     email: string,
     password: string,
     role: string,
+    profile_picture: string,
   ) {
     const updatedUser = await this.findUser(id);
     if (first_name) {
@@ -266,6 +306,9 @@ export class UsersService {
     }
     if (role) {
       updatedUser.role = role;
+    }
+    if (profile_picture) {
+      updatedUser.profile_picture = profile_picture;
     }
 
     updatedUser.save();

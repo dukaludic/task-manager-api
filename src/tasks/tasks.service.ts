@@ -37,6 +37,7 @@ export class TasksService {
     description: string,
     created_by: string,
     creation_time: Date,
+    due_date: Date,
   ) {
     const newTask = new this.taskModel({
       title,
@@ -48,6 +49,7 @@ export class TasksService {
       description,
       created_by,
       creation_time,
+      due_date,
     });
 
     console.log(newTask, '===newTask');
@@ -99,6 +101,7 @@ export class TasksService {
         description: tasks[i].description,
         created_by: tasks[i].created_by,
         creation_time: tasks[i].creation_time,
+        due_date: tasks[i].due_date,
       };
 
       tasksCollection.push(data);
@@ -124,9 +127,9 @@ export class TasksService {
         await this.subtasksService.findSubtasksPerTaskId(idString);
 
       const assignedUsersCollection = [];
-      for (let i = 0; i < tasks[i].assigned_users.length; i++) {
+      for (let j = 0; j < tasks[i].assigned_users.length; j++) {
         const user = await this.usersService.getSingleUserForProjects(
-          tasks[i].assigned_users[i],
+          tasks[j].assigned_users[j],
           5,
         );
 
@@ -152,6 +155,7 @@ export class TasksService {
         description: tasks[i].description,
         created_by: tasks[i].created_by,
         creation_time: tasks[i].creation_time,
+        due_date: tasks[i].due_date,
       };
 
       tasksCollection.push(data);
@@ -161,6 +165,7 @@ export class TasksService {
   }
 
   async getSingleTask(id: string, limiter: number) {
+    console.log(id, '==id');
     const task = await this.taskModel
       .findOne({
         _id: {
@@ -180,10 +185,11 @@ export class TasksService {
     const commentsCollection =
       await this.commentsService.findCommentsByAssignmentId(id);
 
+    console.log('task', task);
     const assignedUsersCollection = [];
-    for (let i = 0; i < task.assigned_users.length; i++) {
+    for (let j = 0; j < task.assigned_users.length; j++) {
       const user = await this.usersService.getSingleUserForProjects(
-        task.assigned_users[i],
+        task.assigned_users[j],
         5,
       );
 
@@ -202,6 +208,7 @@ export class TasksService {
       description: task.description,
       created_by: task.created_by,
       creation_time: task.creation_time,
+      due_date: task.due_date,
     };
 
     return data;
@@ -218,6 +225,7 @@ export class TasksService {
     description: string,
     created_by: string,
     creation_time: Date,
+    due_date: Date,
   ) {
     const updatedTask = await this.findTask(id);
     if (title) {
@@ -246,6 +254,9 @@ export class TasksService {
     }
     if (creation_time) {
       updatedTask.creation_time = creation_time;
+    }
+    if (due_date) {
+      updatedTask.due_date = due_date;
     }
 
     updatedTask.save();

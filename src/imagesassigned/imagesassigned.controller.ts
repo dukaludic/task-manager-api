@@ -25,7 +25,7 @@ export class ImagesassignedController {
   ) {
     const result = await this.imagesassignedService.insertImageassigned(
       assignment_id,
-  image_id,
+      image_id,
     );
     return { id: result };
   }
@@ -50,9 +50,14 @@ export class ImagesassignedController {
     return imagesassigned;
   }
 
-  @Get(':id')
+  @Get('single/:id')
   getImageassignedSingle(@Param('id') id: string) {
     return this.imagesassignedService.getSingleImageassigned(id, 5);
+  }
+
+  @Get('assignment_id/:id')
+  getImagesassignedByAssignmentId(@Param('id') id: string) {
+    return this.imagesassignedService.getSingleImageassignedByAssignmentId(id);
   }
 
   @Patch(':id')
@@ -64,7 +69,7 @@ export class ImagesassignedController {
     const result = await this.imagesassignedService.updateImageassigned(
       id,
       assignment_id,
-  image_id,
+      image_id,
     );
     return result;
   }

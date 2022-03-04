@@ -26,6 +26,7 @@ export class UsersController {
     @Body('email') email: string,
     @Body('password') password: string,
     @Body('role') role: string,
+    @Body('profile_picture') profile_picture: string,
   ) {
     console.log(first_name, last_name, email);
     const result = await this.usersService.insertUser(
@@ -35,6 +36,7 @@ export class UsersController {
       email,
       password,
       role,
+      profile_picture,
     );
     return { id: result };
   }
@@ -58,9 +60,14 @@ export class UsersController {
     return users;
   }
 
-  @Get(':id')
+  @Get('single/:id')
   getUserSingle(@Param('id') id: string) {
     return this.usersService.getSingleUser(id, 5);
+  }
+
+  @Get('basic/:id')
+  getUserBasicInfo(@Param('id') id: string) {
+    return this.usersService.getUserBasicInfo(id);
   }
 
   @Patch(':id')
@@ -72,6 +79,7 @@ export class UsersController {
     @Body('email') email: string,
     @Body('password') password: string,
     @Body('role') role: string,
+    @Body('profile_picture') profile_picture: string,
   ) {
     const result = await this.usersService.updateUser(
       id,
@@ -81,6 +89,7 @@ export class UsersController {
       email,
       password,
       role,
+      profile_picture,
     );
     return result;
   }

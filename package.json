@@ -30,6 +30,7 @@
     "@nestjs/platform-express": "^8.0.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^14.2.0",
+    "image-to-base64": "^2.2.0",
     "mongoose": "^6.1.7",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",

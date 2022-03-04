@@ -55,6 +55,21 @@ export class ImagesassignedService {
     return imageassigned;
   }
 
+  async getSingleImageassignedByAssignmentId(id: string) {
+    console.log('id', id);
+    const imageassigned = await this.imageassignedModel
+      .findOne({
+        assignment_id: {
+          $eq: id,
+        },
+      })
+      .exec();
+
+    console.log(imageassigned);
+
+    return imageassigned;
+  }
+
   async updateImageassigned(
     id: string,
     assignment_id: string,

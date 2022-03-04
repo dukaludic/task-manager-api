@@ -12,6 +12,7 @@ export const UserSchema = new mongoose.Schema(
       enum: ['admin', 'project_manager', 'worker'],
       required: true,
     },
+    profile_picture: { type: String, required: true },
   },
   { versionKey: false },
 );
@@ -23,6 +24,7 @@ export interface User extends mongoose.Document {
   email: string;
   password: string;
   role: string;
+  profile_picture: string;
 }
 
 //brisati product_id

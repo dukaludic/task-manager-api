@@ -40,7 +40,7 @@ export class ImagesService {
     return images;
   }
 
-  async getSingleImage(id: string, limiter: number) {
+  async getSingleImage(id: string) {
     const image = await this.imageModel
       .findOne({
         id: {

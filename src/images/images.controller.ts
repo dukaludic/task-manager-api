@@ -42,7 +42,7 @@ export class ImagesController {
 
   @Get(':id')
   getImageSingle(@Param('id') id: string) {
-    return this.imagesService.getSingleImage(id, 5);
+    return this.imagesService.getSingleImage(id);
   }
 
   @Patch(':id')

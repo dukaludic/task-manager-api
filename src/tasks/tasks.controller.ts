@@ -28,6 +28,7 @@ export class TasksController {
     @Body('description') description: string,
     @Body('created_by') created_by: string,
     @Body('creation_time') creation_time: Date,
+    @Body('due_date') due_date: Date,
   ) {
     const result = await this.tasksService.insertTask(
       title,
@@ -39,6 +40,7 @@ export class TasksController {
       description,
       created_by,
       creation_time,
+      due_date,
     );
     return { id: result };
   }
@@ -73,6 +75,7 @@ export class TasksController {
     @Body('description') description: string,
     @Body('created_by') created_by: string,
     @Body('creation_time') creation_time: Date,
+    @Body('due_date') due_date: Date,
   ) {
     console.log(id, '==id');
     const result = await this.tasksService.updateTask(
@@ -86,6 +89,7 @@ export class TasksController {
       description,
       created_by,
       creation_time,
+      due_date,
     );
     return result;
   }

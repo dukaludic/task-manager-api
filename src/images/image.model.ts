@@ -2,8 +2,8 @@ import * as mongoose from 'mongoose';
 
 export const ImageSchema = new mongoose.Schema(
   {
-    file_url: { type: String, required: true },
-    base_64: { type: String, required: true },
+    file_url: { type: String, required: false },
+    base_64: { type: String, required: false },
   },
   { versionKey: false },
 );
