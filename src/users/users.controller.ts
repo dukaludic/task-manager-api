@@ -56,18 +56,28 @@ export class UsersController {
 
   @Get('names')
   async getAllUserNames() {
-    const users = await this.usersService.getUserNames();
+    const users = await this.usersService.getUserNamesAndRoles();
     return users;
   }
 
   @Get('single/:id')
-  getUserSingle(@Param('id') id: string) {
-    return this.usersService.getSingleUser(id, 5);
+  async getUserSingle(@Param('id') id: string) {
+    return await this.usersService.getSingleUser(id, 5);
   }
 
   @Get('basic/:id')
-  getUserBasicInfo(@Param('id') id: string) {
-    return this.usersService.getUserBasicInfo(id);
+  async getUserBasicInfo(@Param('id') id: string) {
+    return await this.usersService.getUserBasicInfo(id);
+  }
+
+  @Get('usernames')
+  async getUsernames() {
+    return await this.usersService.getUsernames();
+  }
+
+  @Get('emails')
+  async getEmails() {
+    return await this.usersService.getEmails();
   }
 
   @Patch(':id')

@@ -65,7 +65,7 @@ export class ImagesassignedService {
       })
       .exec();
 
-    console.log(imageassigned);
+    console.log(imageassigned, '===imageassigned');
 
     return imageassigned;
   }

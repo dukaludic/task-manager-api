@@ -43,11 +43,12 @@ export class ImagesService {
   async getSingleImage(id: string) {
     const image = await this.imageModel
       .findOne({
-        id: {
+        _id: {
           $eq: id,
         },
       })
       .exec();
+    console.log(image, '===image');
 
     return image;
   }

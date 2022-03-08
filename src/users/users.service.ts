@@ -90,7 +90,27 @@ export class UsersService {
     return user;
   }
 
-  async getUserNames() {
+  async getUsernames() {
+    const users = await this.userModel.find().exec();
+
+    const usernames = [];
+    for (let i = 0; i < users.length; i++) {
+      usernames.push(users[i].username);
+    }
+    return usernames;
+  }
+
+  async getEmails() {
+    const users = await this.userModel.find().exec();
+
+    const emails = [];
+    for (let i = 0; i < users.length; i++) {
+      emails.push(users[i].email);
+    }
+    return emails;
+  }
+
+  async getUserNamesAndRoles() {
     const users = await this.userModel.find().exec();
 
     const usersCollection = [];
@@ -171,6 +191,8 @@ export class UsersService {
       await this.imagesassignedService.getSingleImageassignedByAssignmentId(
         user.id,
       );
+
+    console.log(profileImageAssigned, '===profileImageAssigned');
 
     const profileImage = await this.imagesService.getSingleImage(
       profileImageAssigned?.image_id,
