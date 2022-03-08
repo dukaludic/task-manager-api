@@ -9,6 +9,7 @@ import { ProjectsModule } from 'src/projects/projects.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { ImagesModule } from 'src/images/images.module';
 import { ImagesassignedModule } from 'src/imagesassigned/imagesassigned.module';
+import { EventsModule } from 'src/events/events.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ImagesassignedModule } from 'src/imagesassigned/imagesassigned.module';
     AuthModule,
     ImagesModule,
     ImagesassignedModule,
+    forwardRef(() => EventsModule),
   ],
   controllers: [UsersController],
   providers: [UsersService],

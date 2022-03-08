@@ -13,7 +13,7 @@ import { BlockersModule } from 'src/blockers/blockers.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Event', schema: EventSchema }]),
-    UsersModule,
+    forwardRef(() => UsersModule),
     CommentsModule,
     ProjectsModule,
     TasksModule,

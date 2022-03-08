@@ -15,6 +15,7 @@ import { UserprojectService } from '../userproject/userproject.service';
 import { ProjectsService } from '../projects/projects.service';
 import { ImagesService } from 'src/images/images.service';
 import { ImagesassignedService } from 'src/imagesassigned/imagesassigned.service';
+import { EventsService } from '../events/events.service';
 
 @Injectable()
 export class UsersService {
@@ -24,6 +25,8 @@ export class UsersService {
     private projectsService: ProjectsService,
     private imagesService: ImagesService,
     private imagesassignedService: ImagesassignedService,
+    @Inject(forwardRef(() => EventsService))
+    private eventsService: EventsService,
   ) {}
 
   async insertUser(

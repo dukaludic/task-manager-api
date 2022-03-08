@@ -22,6 +22,7 @@ import { BlockersService } from 'src/blockers/blockers.service';
 export class EventsService {
   constructor(
     @InjectModel('Event') private readonly eventModel: Model<Event>,
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
     private commentsService: CommentsService,
     private projectsService: ProjectsService,
