@@ -187,9 +187,9 @@ export class TasksService {
 
     console.log('task', task);
     const assignedUsersCollection = [];
-    for (let j = 0; j < task.assigned_users.length; j++) {
+    for (let j = 0; j < task?.assigned_users.length; j++) {
       const user = await this.usersService.getSingleUserForProjects(
-        task.assigned_users[j],
+        task?.assigned_users[j],
         5,
       );
 
@@ -197,18 +197,18 @@ export class TasksService {
     }
 
     const data = {
-      id: task._id,
-      title: task.title,
-      project_id: task.project_id,
+      id: task?._id,
+      title: task?.title,
+      project_id: task?.project_id,
       assigned_users: assignedUsersCollection,
       sub_tasks: subtasksCollection,
-      status: task.status,
+      status: task?.status,
       blockers: blockersCollection,
       comments: commentsCollection,
-      description: task.description,
-      created_by: task.created_by,
-      creation_time: task.creation_time,
-      due_date: task.due_date,
+      description: task?.description,
+      created_by: task?.created_by,
+      creation_time: task?.creation_time,
+      due_date: task?.due_date,
     };
 
     return data;
