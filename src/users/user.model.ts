@@ -12,7 +12,7 @@ export const UserSchema = new mongoose.Schema(
       enum: ['admin', 'project_manager', 'worker'],
       required: true,
     },
-    profile_picture: { type: String, required: true },
+    profile_picture: { type: String, required: false },
   },
   { versionKey: false },
 );
