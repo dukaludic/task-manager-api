@@ -3,13 +3,17 @@ import * as mongoose from 'mongoose';
 export const ProjectSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    tasks: { type: Array, required: true },
-    project_manager_id: { type: String, required: true },
-    assigned_users: { type: Array, required: true },
-    start_date: { type: Date, required: true },
-    end_date: { type: Date, required: true },
-    status: { type: String, enum: ['in_progress', 'finished'], required: true },
-    description: { type: String, required: true },
+    tasks: { type: Array, required: false },
+    project_manager_id: { type: String, required: false },
+    assigned_users: { type: Array, required: false },
+    start_date: { type: Date, required: false },
+    end_date: { type: Date, required: false },
+    status: {
+      type: String,
+      enum: ['to_do', 'in_progress', 'in_review', 'done'],
+      required: false,
+    },
+    description: { type: String, required: false },
   },
   { versionKey: false },
 );

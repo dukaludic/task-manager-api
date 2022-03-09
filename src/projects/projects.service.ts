@@ -88,9 +88,8 @@ export class ProjectsService {
 
       const assignedUsersCollection = [];
       for (let j = 0; j < projects[i].assigned_users.length; j++) {
-        const user = await this.usersService.getSingleUserForProjects(
+        const user = await this.usersService.getUserBasicInfo(
           projects[i].assigned_users[j],
-          5,
         );
         assignedUsersCollection.push(user);
       }
@@ -177,9 +176,8 @@ export class ProjectsService {
 
       const assignedUsersCollection = [];
       for (let j = 0; j < projects[i].assigned_users.length; j++) {
-        const user = await this.usersService.getSingleUserForProjects(
+        const user = await this.usersService.getUserBasicInfo(
           projects[i].assigned_users[j],
-          5,
         );
         assignedUsersCollection.push(user);
       }
