@@ -143,21 +143,23 @@ export class ProjectsService {
     return projectCollection;
   }
 
+  //{ $or: [ { assigned_users: { $in: id}, {project_manager_id: {$eq: id}} }] }
+
+  //{ $or: [ { assigned_users: {$in: id}}, { project_manager_id: {$eq: id} }] }
+
   async getProjectsPerUserId(id: string) {
+    console.log(id, '===id');
     const projects = await this.projectModel
       .find({
-        assigned_users: {
-          $in: id,
-        },
+        $or: [
+          { assigned_users: { $in: id } },
+          { project_manager_id: { $eq: id } },
+        ],
       })
       .exec();
 
     const projectsCollection = [];
     for (let i = 0; i < projects.length; i++) {
-      if (projects[i] === null) {
-        continue;
-      }
-
       const idString = projects[i]._id.toString();
 
       const tasksCollection = await this.tasksService.getTasksPerProjectId(
@@ -182,11 +184,16 @@ export class ProjectsService {
         assignedUsersCollection.push(user);
       }
 
+      const projectManagerData = await this.usersService.getUserBasicInfo(
+        projects[i].project_manager_id,
+      );
+
       const data = {
         id: projects[i].id,
         title: projects[i].title,
         tasks: tasksCollection,
         assigned_users: assignedUsersCollection,
+        project_manager: projectManagerData,
         start_date: projects[i].start_date,
         end_date: projects[i].end_date,
         comments: commentsCollection,

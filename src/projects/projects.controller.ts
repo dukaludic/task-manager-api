@@ -52,14 +52,14 @@ export class ProjectsController {
   }
 
   @Get()
-  async getAllProjects(@Request() req) {
+  async getAllProjects() {
     console.log('getAllProjects');
     const projects = await this.projectsService.getProjects(10);
     return projects;
   }
 
   @Get('user/:id')
-  async getPerUserId(@Request() req, @Param('id') id: string) {
+  async getPerUserId(@Param('id') id: string) {
     const projects = await this.projectsService.getProjectsPerUserId(id);
     return projects;
   }
