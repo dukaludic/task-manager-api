@@ -17,6 +17,7 @@ export const TaskSchema = new mongoose.Schema(
     created_by: { type: String, required: false },
     creation_time: { type: Date, required: false },
     due_date: { type: Date, required: false },
+    approved: { type: Boolean, required: false, default: false },
   },
   { versionKey: false },
 );
@@ -32,4 +33,5 @@ export interface Task extends mongoose.Document {
   created_by: string;
   creation_time: Date;
   due_date: Date;
+  approved: boolean;
 }

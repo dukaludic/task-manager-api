@@ -29,6 +29,7 @@ export class TasksController {
     @Body('created_by') created_by: string,
     @Body('creation_time') creation_time: Date,
     @Body('due_date') due_date: Date,
+    @Body('approved') approved: boolean,
   ) {
     const result = await this.tasksService.insertTask(
       title,
@@ -41,6 +42,7 @@ export class TasksController {
       created_by,
       creation_time,
       due_date,
+      approved,
     );
     return { id: result };
   }
@@ -63,6 +65,12 @@ export class TasksController {
     return this.tasksService.getSingleTask(id, 5);
   }
 
+  @Get('user/:id')
+  async getTasksPerUser(@Param('id') id: string) {
+    const tasks = await this.tasksService.getTasksPerUserId(id);
+    return tasks;
+  }
+
   @Patch(':id')
   async updateTask(
     @Param('id') id: string,
@@ -76,6 +84,7 @@ export class TasksController {
     @Body('created_by') created_by: string,
     @Body('creation_time') creation_time: Date,
     @Body('due_date') due_date: Date,
+    @Body('approved') approved: boolean,
   ) {
     console.log(id, '==id');
     const result = await this.tasksService.updateTask(
@@ -90,6 +99,7 @@ export class TasksController {
       created_by,
       creation_time,
       due_date,
+      approved,
     );
     return result;
   }

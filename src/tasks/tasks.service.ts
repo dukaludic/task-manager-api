@@ -38,6 +38,7 @@ export class TasksService {
     created_by: string,
     creation_time: Date,
     due_date: Date,
+    approved: Boolean,
   ) {
     const newTask = new this.taskModel({
       title,
@@ -50,6 +51,7 @@ export class TasksService {
       created_by,
       creation_time,
       due_date,
+      approved,
     });
 
     console.log(newTask, '===newTask');
@@ -102,6 +104,7 @@ export class TasksService {
         created_by: tasks[i].created_by,
         creation_time: tasks[i].creation_time,
         due_date: tasks[i].due_date,
+        approved: tasks[i].approved,
       };
 
       tasksCollection.push(data);
@@ -156,6 +159,59 @@ export class TasksService {
         created_by: tasks[i].created_by,
         creation_time: tasks[i].creation_time,
         due_date: tasks[i].due_date,
+        approved: tasks[i].approved,
+      };
+
+      tasksCollection.push(data);
+    }
+
+    return tasksCollection;
+  }
+
+  async getTasksPerUserId(id: string) {
+    const tasks = await this.taskModel
+      .find({
+        assigned_users: { $in: id },
+      })
+      .exec();
+
+    const tasksCollection = [];
+    for (let i = 0; i < tasks.length; i++) {
+      const idString = tasks[i]._id.toString();
+      const subtasksCollection =
+        await this.subtasksService.findSubtasksPerTaskId(idString);
+
+      const assignedUsersCollection = [];
+      for (let j = 0; j < tasks[i].assigned_users.length; j++) {
+        const user = await this.usersService.getSingleUserForProjects(
+          tasks[i].assigned_users[j],
+          5,
+        );
+
+        assignedUsersCollection.push(user);
+      }
+
+      const blockersCollection = await this.blockersService.getBlockersByTaskId(
+        idString,
+      );
+
+      const commentsCollection =
+        await this.commentsService.findCommentsByAssignmentId(idString);
+
+      const data = {
+        id: tasks[i]._id,
+        title: tasks[i].title,
+        project_id: tasks[i].project_id,
+        assigned_users: assignedUsersCollection,
+        sub_tasks: subtasksCollection,
+        status: tasks[i].status,
+        blockers: blockersCollection,
+        comments: commentsCollection,
+        description: tasks[i].description,
+        created_by: tasks[i].created_by,
+        creation_time: tasks[i].creation_time,
+        due_date: tasks[i].due_date,
+        approved: tasks[i].approved,
       };
 
       tasksCollection.push(data);
@@ -209,6 +265,7 @@ export class TasksService {
       created_by: task?.created_by,
       creation_time: task?.creation_time,
       due_date: task?.due_date,
+      approved: task?.approved,
     };
 
     return data;
@@ -226,6 +283,7 @@ export class TasksService {
     created_by: string,
     creation_time: Date,
     due_date: Date,
+    approved: boolean,
   ) {
     const updatedTask = await this.findTask(id);
     if (title) {
@@ -257,6 +315,9 @@ export class TasksService {
     }
     if (due_date) {
       updatedTask.due_date = due_date;
+    }
+    if (approved === false || approved === true) {
+      updatedTask.approved = approved;
     }
 
     updatedTask.save();
