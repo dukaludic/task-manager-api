@@ -39,6 +39,10 @@ export class TasksService {
     creation_time: Date,
     due_date: Date,
     approved: Boolean,
+    approved_by: string,
+    time_approved: Date,
+    time_sent_to_review: Date,
+    still_visible_to_worker: Boolean,
   ) {
     const newTask = new this.taskModel({
       title,
@@ -52,6 +56,10 @@ export class TasksService {
       creation_time,
       due_date,
       approved,
+      approved_by,
+      time_approved,
+      time_sent_to_review,
+      still_visible_to_worker,
     });
 
     console.log(newTask, '===newTask');
@@ -91,6 +99,14 @@ export class TasksService {
       const commentsCollection =
         await this.commentsService.findCommentsByAssignmentId(idString);
 
+      let approvedByData;
+      if (tasks[i]?.approved_by) {
+        approvedByData = await this.usersService.getSingleUserForProjects(
+          tasks[i]?.approved_by,
+          5,
+        );
+      }
+
       const data = {
         id: tasks[i]._id,
         title: tasks[i].title,
@@ -105,6 +121,10 @@ export class TasksService {
         creation_time: tasks[i].creation_time,
         due_date: tasks[i].due_date,
         approved: tasks[i].approved,
+        approved_by: approvedByData,
+        time_approved: tasks[i].time_approved,
+        time_sent_to_review: tasks[i].time_sent_to_review,
+        still_visible_to_worker: tasks[i].still_visible_to_worker,
       };
 
       tasksCollection.push(data);
@@ -146,6 +166,14 @@ export class TasksService {
       const commentsCollection =
         await this.commentsService.findCommentsByAssignmentId(idString);
 
+      let approvedByData;
+      if (tasks[i]?.approved_by) {
+        approvedByData = await this.usersService.getSingleUserForProjects(
+          tasks[i]?.approved_by,
+          5,
+        );
+      }
+
       const data = {
         id: tasks[i]._id,
         title: tasks[i].title,
@@ -160,6 +188,10 @@ export class TasksService {
         creation_time: tasks[i].creation_time,
         due_date: tasks[i].due_date,
         approved: tasks[i].approved,
+        approved_by: approvedByData,
+        time_approved: tasks[i].time_approved,
+        time_sent_to_review: tasks[i].time_sent_to_review,
+        still_visible_to_worker: tasks[i].still_visible_to_worker,
       };
 
       tasksCollection.push(data);
@@ -198,6 +230,14 @@ export class TasksService {
       const commentsCollection =
         await this.commentsService.findCommentsByAssignmentId(idString);
 
+      let approvedByData;
+      if (tasks[i]?.approved_by) {
+        approvedByData = await this.usersService.getSingleUserForProjects(
+          tasks[i]?.approved_by,
+          5,
+        );
+      }
+
       const data = {
         id: tasks[i]._id,
         title: tasks[i].title,
@@ -212,6 +252,10 @@ export class TasksService {
         creation_time: tasks[i].creation_time,
         due_date: tasks[i].due_date,
         approved: tasks[i].approved,
+        approved_by: approvedByData,
+        time_approved: tasks[i].time_approved,
+        time_sent_to_review: tasks[i].time_sent_to_review,
+        still_visible_to_worker: tasks[i].still_visible_to_worker,
       };
 
       tasksCollection.push(data);
@@ -252,6 +296,14 @@ export class TasksService {
       assignedUsersCollection.push(user);
     }
 
+    let approvedByData;
+    if (task?.approved_by) {
+      approvedByData = await this.usersService.getSingleUserForProjects(
+        task?.approved_by,
+        5,
+      );
+    }
+
     const data = {
       id: task?._id,
       title: task?.title,
@@ -266,6 +318,10 @@ export class TasksService {
       creation_time: task?.creation_time,
       due_date: task?.due_date,
       approved: task?.approved,
+      approved_by: approvedByData,
+      time_approved: task?.time_approved,
+      time_sent_to_review: task?.time_sent_to_review,
+      still_visible_to_worker: task?.still_visible_to_worker,
     };
 
     return data;
@@ -284,6 +340,10 @@ export class TasksService {
     creation_time: Date,
     due_date: Date,
     approved: boolean,
+    approved_by: string,
+    time_approved: Date,
+    time_sent_to_review: Date,
+    still_visible_to_worker: Boolean,
   ) {
     const updatedTask = await this.findTask(id);
     if (title) {
@@ -318,6 +378,18 @@ export class TasksService {
     }
     if (approved === false || approved === true) {
       updatedTask.approved = approved;
+    }
+    if (approved_by) {
+      updatedTask.approved_by = approved_by;
+    }
+    if (time_approved) {
+      updatedTask.time_approved = time_approved;
+    }
+    if (time_sent_to_review) {
+      updatedTask.time_sent_to_review = time_sent_to_review;
+    }
+    if (still_visible_to_worker === false || still_visible_to_worker === true) {
+      updatedTask.still_visible_to_worker = still_visible_to_worker;
     }
 
     updatedTask.save();

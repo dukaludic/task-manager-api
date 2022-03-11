@@ -18,6 +18,10 @@ export const TaskSchema = new mongoose.Schema(
     creation_time: { type: Date, required: false },
     due_date: { type: Date, required: false },
     approved: { type: Boolean, required: false, default: false },
+    approved_by: { type: String, required: false },
+    time_approved: { type: Date, required: false },
+    time_sent_to_review: { type: Date, required: false },
+    still_visible_to_worker: { type: Boolean, required: false },
   },
   { versionKey: false },
 );
@@ -34,4 +38,8 @@ export interface Task extends mongoose.Document {
   creation_time: Date;
   due_date: Date;
   approved: boolean;
+  approved_by: string;
+  time_approved: Date;
+  time_sent_to_review: Date;
+  still_visible_to_worker: Boolean;
 }

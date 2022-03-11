@@ -30,6 +30,10 @@ export class TasksController {
     @Body('creation_time') creation_time: Date,
     @Body('due_date') due_date: Date,
     @Body('approved') approved: boolean,
+    @Body('approved_by') approved_by: string,
+    @Body('time_approved') time_approved: Date,
+    @Body('time_sent_to_review') time_sent_to_review: Date,
+    @Body('still_visible_to_worker') still_visible_to_worker: Boolean,
   ) {
     const result = await this.tasksService.insertTask(
       title,
@@ -43,6 +47,10 @@ export class TasksController {
       creation_time,
       due_date,
       approved,
+      approved_by,
+      time_approved,
+      time_sent_to_review,
+      still_visible_to_worker,
     );
     return { id: result };
   }
@@ -85,6 +93,10 @@ export class TasksController {
     @Body('creation_time') creation_time: Date,
     @Body('due_date') due_date: Date,
     @Body('approved') approved: boolean,
+    @Body('approved_by') approved_by: string,
+    @Body('time_approved') time_approved: Date,
+    @Body('time_sent_to_review') time_sent_to_review: Date,
+    @Body('still_visible_to_worker') still_visible_to_worker: Boolean,
   ) {
     console.log(id, '==id');
     const result = await this.tasksService.updateTask(
@@ -100,6 +112,10 @@ export class TasksController {
       creation_time,
       due_date,
       approved,
+      approved_by,
+      time_approved,
+      time_sent_to_review,
+      still_visible_to_worker,
     );
     return result;
   }
