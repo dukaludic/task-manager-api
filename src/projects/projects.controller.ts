@@ -74,6 +74,16 @@ export class ProjectsController {
     return this.projectsService.getProjectTitles();
   }
 
+  @Get('basic/:id')
+  getProjectBasicInfo(@Param('id') id: string) {
+    return this.projectsService.getProjectBasicInfo(id);
+  }
+
+  @Get('task/:id')
+  getByTaskId(@Param('id') id: string) {
+    return this.projectsService.getProjectByTaskId(id);
+  }
+
   @Patch(':id')
   async updateProject(
     @Param('id') id: string,

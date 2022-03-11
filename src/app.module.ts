@@ -18,6 +18,7 @@ import { UserprojectModule } from './userproject/userproject.module';
 import { CommentsassignedModule } from './commentsassigned/commentsassigned.module';
 import { AuthModule } from './auth/auth.module';
 import { EventsassignedModule } from './eventsAssigned/eventsassigned.module';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { EventsassignedModule } from './eventsAssigned/eventsassigned.module';
     CommentsassignedModule,
     AuthModule,
     EventsassignedModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

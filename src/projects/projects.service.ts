@@ -20,6 +20,7 @@ import { CommentsService } from 'src/comments/comments.service';
 export class ProjectsService {
   constructor(
     @InjectModel('Project') private readonly projectModel: Model<Project>,
+    @Inject(forwardRef(() => TasksService))
     private tasksService: TasksService,
     @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
@@ -141,6 +142,36 @@ export class ProjectsService {
       projectCollection.push(project);
     }
     return projectCollection;
+  }
+
+  async getProjectBasicInfo(id: string) {
+    const project = await this.projectModel
+      .findOne({
+        id: {
+          $eq: id,
+        },
+      })
+      .exec();
+
+    console.log(project);
+
+    const data = {
+      id: project.id,
+      title: project.title,
+      project_manager: project.project_manager_id,
+    };
+
+    return data;
+  }
+
+  async getProjectByTaskId(id: string) {
+    const project = await this.projectModel.findOne({
+      tasks: {
+        $in: id,
+      },
+    });
+
+    return project;
   }
 
   //{ $or: [ { assigned_users: { $in: id}, {project_manager_id: {$eq: id}} }] }

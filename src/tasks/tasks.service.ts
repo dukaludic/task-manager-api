@@ -15,6 +15,7 @@ import { SubtasksService } from 'src/subtasks/subtasks.service';
 import { UsersService } from 'src/users/users.service';
 import { BlockersService } from '../blockers/blockers.service';
 import { CommentsService } from '../comments/comments.service';
+import { ProjectsService } from '../projects/projects.service';
 
 @Injectable()
 export class TasksService {
@@ -25,6 +26,8 @@ export class TasksService {
     private usersService: UsersService,
     private blockersService: BlockersService,
     private commentsService: CommentsService,
+    @Inject(forwardRef(() => ProjectsService))
+    private projectsService: ProjectsService,
   ) {}
 
   async insertTask(
@@ -107,6 +110,8 @@ export class TasksService {
         );
       }
 
+      // const projectData = this.projectsService.getProjectBasicInfo()
+
       const data = {
         id: tasks[i]._id,
         title: tasks[i].title,
@@ -133,6 +138,14 @@ export class TasksService {
     return tasksCollection;
   }
 
+  // async getProjectByTaskId(id: string) {
+  //   // const task = await this.taskModel.findOne({ id: { $eq: id } }).exec();
+
+  // project = this.projectsService.getProjectBasicInfo(id);
+
+  //   return project;
+  // }
+
   async getTasksPerProjectId(id: string) {
     console.log(id, '====getTaskPerProjectId id');
     const tasks = await this.taskModel
@@ -151,8 +164,12 @@ export class TasksService {
 
       const assignedUsersCollection = [];
       for (let j = 0; j < tasks[i].assigned_users.length; j++) {
+        console.log(
+          tasks[i].assigned_users[j],
+          '000000000000000000000000000000000',
+        );
         const user = await this.usersService.getSingleUserForProjects(
-          tasks[j].assigned_users[j],
+          tasks[i].assigned_users[j],
           5,
         );
 
@@ -173,6 +190,10 @@ export class TasksService {
           5,
         );
       }
+
+      const projectBasicData = await this.projectsService.getProjectBasicInfo(
+        tasks[i].project_id,
+      );
 
       const data = {
         id: tasks[i]._id,
@@ -203,7 +224,10 @@ export class TasksService {
   async getTasksPerUserId(id: string) {
     const tasks = await this.taskModel
       .find({
-        assigned_users: { $in: id },
+        $or: [
+          { assigned_users: { $in: id } },
+          { project_manager_id: { $eq: id } },
+        ],
       })
       .exec();
 

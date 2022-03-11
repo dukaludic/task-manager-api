@@ -192,7 +192,7 @@ export class UsersService {
 
     const profileImageAssigned =
       await this.imagesassignedService.getSingleImageassignedByAssignmentId(
-        user.id,
+        user?.id,
       );
 
     console.log(profileImageAssigned, '===profileImageAssigned');
@@ -202,12 +202,12 @@ export class UsersService {
     );
 
     const data = {
-      id: user.id,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      username: user.username,
-      email: user.email,
-      role: user.role,
+      id: user?.id,
+      first_name: user?.first_name,
+      last_name: user?.last_name,
+      username: user?.username,
+      email: user?.email,
+      role: user?.role,
       profile_picture: profileImage,
     };
 
@@ -239,7 +239,7 @@ export class UsersService {
   }
 
   async getSingleUserForProjects(id: string, limiter: number) {
-    console.log(typeof id, '==id 123');
+    console.log(id, '==id 12311111111111111111111111');
     const user = await this.userModel
       .findOne({
         _id: {
@@ -251,6 +251,7 @@ export class UsersService {
     console.log(user, '===user');
 
     const data = {
+      id: user.id,
       first_name: user?.first_name,
       last_name: user?.last_name,
       username: user?.username,
