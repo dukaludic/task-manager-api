@@ -21,12 +21,12 @@ export class SubtasksController {
   async addSubtask(
     @Body('task_id') task_id: string,
     @Body('content') content: string,
-    @Body('status') status: boolean,
+    @Body('done') done: boolean,
   ) {
     const result = await this.subtasksService.insertSubtask(
       task_id,
       content,
-      status,
+      done,
     );
     return { id: result };
   }
@@ -54,14 +54,14 @@ export class SubtasksController {
     @Param('id') id: string,
     @Body('task_id') task_id: string,
     @Body('content') content: string,
-    @Body('status') status: boolean,
+    @Body('done') done: boolean,
   ) {
     console.log(id, '==id');
     const result = await this.subtasksService.updateSubtask(
       id,
       task_id,
       content,
-      status,
+      done,
     );
     return result;
   }

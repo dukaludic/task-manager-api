@@ -18,11 +18,11 @@ export class SubtasksService {
     @InjectModel('Subtask') private readonly subtaskModel: Model<Subtask>,
   ) {}
 
-  async insertSubtask(task_id: string, content: string, status: boolean) {
+  async insertSubtask(task_id: string, content: string, done: boolean) {
     const newSubtask = new this.subtaskModel({
       task_id,
       content,
-      status,
+      done,
     });
 
     console.log(newSubtask, '===newSubtask');
@@ -68,7 +68,7 @@ export class SubtasksService {
     id: string,
     task_id: string,
     content: string,
-    status: boolean,
+    done: boolean,
   ) {
     const updatedSubtask = await this.findSubtask(id);
     if (task_id) {
@@ -77,8 +77,8 @@ export class SubtasksService {
     if (content) {
       updatedSubtask.content = content;
     }
-    if (status || status === false) {
-      updatedSubtask.status = status;
+    if (done || done === false) {
+      updatedSubtask.done = done;
     }
 
     updatedSubtask.save();

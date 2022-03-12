@@ -238,6 +238,10 @@ export class UsersService {
     return user;
   }
 
+  async getUsersBasicInfoByTaskId(id: string, limiter: number) {
+    
+  }
+
   async getSingleUserForProjects(id: string, limiter: number) {
     console.log(id, '==id 12311111111111111111111111');
     const user = await this.userModel

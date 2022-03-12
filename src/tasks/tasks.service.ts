@@ -164,13 +164,8 @@ export class TasksService {
 
       const assignedUsersCollection = [];
       for (let j = 0; j < tasks[i].assigned_users.length; j++) {
-        console.log(
+        const user = await this.usersService.getUserBasicInfo(
           tasks[i].assigned_users[j],
-          '000000000000000000000000000000000',
-        );
-        const user = await this.usersService.getSingleUserForProjects(
-          tasks[i].assigned_users[j],
-          5,
         );
 
         assignedUsersCollection.push(user);
@@ -182,14 +177,6 @@ export class TasksService {
 
       const commentsCollection =
         await this.commentsService.findCommentsByAssignmentId(idString);
-
-      let approvedByData;
-      if (tasks[i]?.approved_by) {
-        approvedByData = await this.usersService.getSingleUserForProjects(
-          tasks[i]?.approved_by,
-          5,
-        );
-      }
 
       const projectBasicData = await this.projectsService.getProjectBasicInfo(
         tasks[i].project_id,
@@ -208,11 +195,6 @@ export class TasksService {
         created_by: tasks[i].created_by,
         creation_time: tasks[i].creation_time,
         due_date: tasks[i].due_date,
-        approved: tasks[i].approved,
-        approved_by: approvedByData,
-        time_approved: tasks[i].time_approved,
-        time_sent_to_review: tasks[i].time_sent_to_review,
-        still_visible_to_worker: tasks[i].still_visible_to_worker,
       };
 
       tasksCollection.push(data);
@@ -239,9 +221,8 @@ export class TasksService {
 
       const assignedUsersCollection = [];
       for (let j = 0; j < tasks[i].assigned_users.length; j++) {
-        const user = await this.usersService.getSingleUserForProjects(
+        const user = await this.usersService.getUserBasicInfo(
           tasks[i].assigned_users[j],
-          5,
         );
 
         assignedUsersCollection.push(user);

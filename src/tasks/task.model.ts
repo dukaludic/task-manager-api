@@ -7,7 +7,7 @@ export const TaskSchema = new mongoose.Schema(
     assigned_users: { type: Array, required: false },
 
     project_manager_id: { type: String, required: false },
-    sub_tasks: { type: Array, required: false },
+    sub_tasks: { type: Array, required: false, default: [] },
     status: {
       type: String,
       enum: ['to_do', 'in_progress', 'in_review', 'done'],

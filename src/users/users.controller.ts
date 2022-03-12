@@ -70,6 +70,11 @@ export class UsersController {
     return await this.usersService.getUserBasicInfo(id);
   }
 
+  @Get('basic/multiple/user/:id')
+  async getUsersBasicInfoByTaskId(@Param('id') id: string) {
+    // return await this.usersService.getUsersBasicInfoByTaskId(id);
+  }
+
   @Get('usernames')
   async getUsernames() {
     return await this.usersService.getUsernames();
