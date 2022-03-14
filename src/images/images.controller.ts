@@ -35,7 +35,6 @@ export class ImagesController {
 
   @Get()
   async getAllImages(@Request() req) {
-    console.log('getAllImages');
     const images = await this.imagesService.getImages(5);
     return images;
   }

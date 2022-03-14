@@ -2,9 +2,9 @@ import * as mongoose from 'mongoose';
 
 export const SubtaskSchema = new mongoose.Schema(
   {
-    task_id: { type: String, required: true },
-    content: { type: String, required: true },
-    done: { type: Boolean, required: true },
+    task_id: { type: String, required: false },
+    content: { type: String, required: false },
+    done: { type: Boolean, required: false },
   },
   { versionKey: false },
 );

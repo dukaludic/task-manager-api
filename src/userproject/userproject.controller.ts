@@ -39,7 +39,6 @@ export class UserprojectController {
 
   @Get()
   async getAllUserproject(@Request() req) {
-    console.log('getAllUserproject');
     const userproject = await this.userprojectService.getUserproject(5);
     return userproject;
   }
@@ -55,7 +54,6 @@ export class UserprojectController {
     @Body('project_id') project_id: string,
     @Body('user_id') user_id: string,
   ) {
-    console.log(id, '==id');
     const result = await this.userprojectService.updateUserproject(
       id,
       project_id,

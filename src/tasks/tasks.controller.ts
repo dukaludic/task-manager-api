@@ -63,7 +63,6 @@ export class TasksController {
 
   @Get()
   async getAllTasks(@Request() req) {
-    console.log('getAllTasks');
     const tasks = await this.tasksService.getTasks(5);
     return tasks;
   }
@@ -103,7 +102,6 @@ export class TasksController {
     @Body('time_sent_to_review') time_sent_to_review: Date,
     @Body('still_visible_to_worker') still_visible_to_worker: Boolean,
   ) {
-    console.log(id, '==id');
     const result = await this.tasksService.updateTask(
       id,
       title,

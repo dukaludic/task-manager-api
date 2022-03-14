@@ -43,7 +43,6 @@ export class ImagesassignedController {
 
   @Get()
   async getAllImagesassigned(@Request() req) {
-    console.log('getAllImagesassigned');
     const imagesassigned = await this.imagesassignedService.getImagesassigned(
       5,
     );
@@ -51,13 +50,20 @@ export class ImagesassignedController {
   }
 
   @Get('single/:id')
-  getImageassignedSingle(@Param('id') id: string) {
+  async getImageassignedSingle(@Param('id') id: string) {
     return this.imagesassignedService.getSingleImageassigned(id, 5);
   }
 
+  @Get('single/assignment_id/:id')
+  async getImagesassignedByAssignmentId(@Param('id') id: string) {
+    return await this.imagesassignedService.getSingleImageassignedByAssignmentId(
+      id,
+    );
+  }
+
   @Get('assignment_id/:id')
-  getImagesassignedByAssignmentId(@Param('id') id: string) {
-    return this.imagesassignedService.getSingleImageassignedByAssignmentId(id);
+  async getImagesByAssignmentId(@Param('id') id: string) {
+    return await this.imagesassignedService.getImagesByAssignmentId(id);
   }
 
   @Patch(':id')

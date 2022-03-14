@@ -46,7 +46,6 @@ export class BlockersController {
 
   @Get()
   async getAllBlockers(@Request() req) {
-    console.log('getAllBlockers');
     const blockers = await this.blockersService.getBlockers(5);
     return blockers;
   }

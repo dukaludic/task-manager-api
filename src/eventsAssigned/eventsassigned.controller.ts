@@ -32,7 +32,6 @@ export class EventsassignedController {
 
   @Get()
   async getAllEventsassigned(@Request() req) {
-    console.log('getAllEventsassigned');
     const eventsassigned = await this.eventsassignedService.getEventsassigned(
       5,
     );

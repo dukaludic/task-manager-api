@@ -28,8 +28,6 @@ export class EventsassignedService {
       assignment_id,
     });
 
-    console.log(newEventassigned, '===newEventassigned');
-
     const result = await newEventassigned.save();
     return result.id as string;
   }
@@ -47,7 +45,6 @@ export class EventsassignedService {
         },
       })
       .exec();
-    console.log(eventassigned, '===eventassigned');
 
     return eventassigned;
   }

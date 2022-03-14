@@ -40,8 +40,6 @@ export class BlockersService {
       user_id,
     });
 
-    console.log(newBlocker, '===newBlocker');
-
     const result = await newBlocker.save();
     return result.id as string;
   }

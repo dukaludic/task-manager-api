@@ -44,7 +44,6 @@ export class CommentsController {
 
   @Get()
   async getAllComments(@Request() req) {
-    console.log('getAllComments');
     const comments = await this.commentsService.getComments(5);
     return comments;
   }

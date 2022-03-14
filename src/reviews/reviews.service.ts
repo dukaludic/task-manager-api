@@ -44,8 +44,6 @@ export class ReviewsService {
       project_id,
     });
 
-    console.log(newReview, '===newReview');
-
     const result = await newReview.save();
     return result.id as string;
   }
@@ -126,7 +124,6 @@ export class ReviewsService {
   }
 
   async findReviewsPerTaskId(id) {
-    console.log(id, '==id');
     const reviews = await this.reviewModel.find({
       task_id: {
         $eq: id,

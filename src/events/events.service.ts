@@ -51,8 +51,6 @@ export class EventsService {
       event_target_type,
     });
 
-    console.log(newEvent, '===newEvent');
-
     const result = await newEvent.save();
     return result.id as string;
   }
@@ -113,7 +111,6 @@ export class EventsService {
 
     let events = [];
     for (let i = 0; i < projectIds.length; i++) {
-      console.log(projectIds[i], 'project id');
       const projectEvents = await this.eventModel.find({
         event_target_project_id: {
           $eq: projectIds[i],
@@ -130,18 +127,8 @@ export class EventsService {
         //Get event object data
         let eventObjectData;
 
-        console.log(
-          projectEvents[j].event_object_id,
-          'projectEvents[j].event_object_id',
-        );
-
         switch (projectEvents[j].event_object_type) {
           case 'comment':
-            console.log(projectEvents[j], 'projectEvents[j]');
-            eventObjectData = await this.commentsService.getSingleComment(
-              projectEvents[j].event_object_id,
-              5,
-            );
             break;
 
           default:
@@ -153,7 +140,6 @@ export class EventsService {
 
         switch (projectEvents[j].event_target_type) {
           case 'task':
-            console.log(projectEvents[j], 'projectEvents[j]');
             eventTargetData = await this.tasksService.getSingleTask(
               projectEvents[j].event_target_id,
               5,
@@ -180,8 +166,6 @@ export class EventsService {
 
       events = [...events, ...projectEventsCollection];
     }
-
-    console.log(events, '===events');
 
     return events;
   }

@@ -12,11 +12,15 @@ import { Model } from 'mongoose';
 
 import { Imageassigned } from './imageassigned.model';
 
+import { ImagesService } from '../images/images.service';
+
 @Injectable()
 export class ImagesassignedService {
   constructor(
     @InjectModel('Imageassigned')
     private readonly imageassignedModel: Model<Imageassigned>,
+    @Inject(forwardRef(() => ImagesService))
+    private imagesService: ImagesService,
   ) {}
 
   async insertImageassigned(assignment_id: string, image_id: string) {
@@ -24,8 +28,6 @@ export class ImagesassignedService {
       assignment_id,
       image_id,
     });
-
-    console.log(newImageassigned, '===newImageassigned');
 
     const result = await newImageassigned.save();
     return result.id as string;
@@ -43,6 +45,19 @@ export class ImagesassignedService {
     return imagesassigned;
   }
 
+  async getImagesassignedByImageId(id: string) {
+    console.log(id, 'id');
+    const imageassigned = await this.imageassignedModel
+      .findOne({
+        image_id: {
+          $eq: id,
+        },
+      })
+      .exec();
+
+    return imageassigned;
+  }
+
   async getSingleImageassigned(id: string, limiter: number) {
     const imageassigned = await this.imageassignedModel
       .findOne({
@@ -55,8 +70,29 @@ export class ImagesassignedService {
     return imageassigned;
   }
 
+  async getImagesByAssignmentId(id: string) {
+    const imagesassigned = await this.imageassignedModel
+      .find({
+        assignment_id: {
+          $eq: id,
+        },
+      })
+      .exec();
+
+    const imagesCollection = [];
+
+    for (let i = 0; i < imagesassigned.length; i++) {
+      const image = await this.imagesService.getSingleImage(
+        imagesassigned[i].image_id,
+      );
+
+      imagesCollection.push(image);
+    }
+
+    return imagesCollection;
+  }
+
   async getSingleImageassignedByAssignmentId(id: string) {
-    console.log('id', id);
     const imageassigned = await this.imageassignedModel
       .findOne({
         assignment_id: {
@@ -64,8 +100,6 @@ export class ImagesassignedService {
         },
       })
       .exec();
-
-    console.log(imageassigned, '===imageassigned');
 
     return imageassigned;
   }
@@ -86,12 +120,13 @@ export class ImagesassignedService {
     return updatedImageassigned;
   }
 
-  async deleteImageassigned(imageassignedId: string) {
-    const result = await this.imageassignedModel
-      .deleteOne({ id: imageassignedId })
+  async deleteImageassigned(id: string) {
+    const deletedImageassigned = await this.imageassignedModel
+      .deleteOne({ _id: { $eq: id } })
       .exec();
+
     return {
-      message: `Deleted ${result.deletedCount} item from database`,
+      message: `Deleted ${deletedImageassigned.deletedCount} item from database`,
     };
   }
 

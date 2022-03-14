@@ -45,7 +45,6 @@ export class CommentsassignedController {
 
   @Get()
   async getAllCommentsassigned(@Request() req) {
-    console.log('getAllCommentsassigned');
     const commentsassigned =
       await this.commentsassignedService.getCommentsassigned(5);
     return commentsassigned;

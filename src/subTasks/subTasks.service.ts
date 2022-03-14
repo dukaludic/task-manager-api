@@ -5,8 +5,6 @@ import {
   forwardRef,
 } from '@nestjs/common';
 
-import { v4 as uuidv4 } from 'uuid';
-
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -25,8 +23,6 @@ export class SubtasksService {
       done,
     });
 
-    console.log(newSubtask, '===newSubtask');
-
     const result = await newSubtask.save();
     return result.id as string;
   }
@@ -41,8 +37,7 @@ export class SubtasksService {
     return subtasks;
   }
 
-  async findSubtasksPerTaskId(id) {
-    console.log(id, '==id');
+  async findSubtasksPerTaskId(id: string) {
     const subtasks = await this.subtaskModel.find({
       task_id: {
         $eq: id,
@@ -77,7 +72,7 @@ export class SubtasksService {
     if (content) {
       updatedSubtask.content = content;
     }
-    if (done || done === false) {
+    if (done === true || done === false) {
       updatedSubtask.done = done;
     }
 

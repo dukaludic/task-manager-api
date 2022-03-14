@@ -49,8 +49,6 @@ export class ProjectsService {
       description,
     });
 
-    console.log(newProject, '===newProject');
-
     const result = await newProject.save();
     return result.id as string;
   }
@@ -63,8 +61,6 @@ export class ProjectsService {
   async getProjects(limiter: number) {
     const projects = await this.projectModel.find().exec();
 
-    console.log(projects, '===projects');
-
     const projectsCollection = [];
     for (let i = 0; i < projects.length; i++) {
       if (projects[i] === null) {
@@ -76,14 +72,6 @@ export class ProjectsService {
       const tasksCollection = await this.tasksService.getTasksPerProjectId(
         projects[i].id,
       );
-      // for (let j = 0; j < projects[i].tasks.length; j++) {
-      //   const task = await this.tasksService.getTasksPerProjectId(
-      //     projects[i].id,
-      //   );
-      //   tasksCollection.push(task);
-      //   console.log(tasksCollection, '===tasksCollection');
-      // }
-
       const commentsCollection =
         await this.commentsService.findCommentsByAssignmentId(idString);
 
@@ -153,12 +141,11 @@ export class ProjectsService {
       })
       .exec();
 
-    console.log(project);
-
     const data = {
       id: project.id,
       title: project.title,
       project_manager: project.project_manager_id,
+      assigned_users: project.assigned_users,
     };
 
     return data;
@@ -179,7 +166,6 @@ export class ProjectsService {
   //{ $or: [ { assigned_users: {$in: id}}, { project_manager_id: {$eq: id} }] }
 
   async getProjectsPerUserId(id: string) {
-    console.log(id, '===id');
     const projects = await this.projectModel
       .find({
         $or: [
@@ -196,13 +182,6 @@ export class ProjectsService {
       const tasksCollection = await this.tasksService.getTasksPerProjectId(
         projects[i].id,
       );
-      // for (let j = 0; j < projects[i].tasks.length; j++) {
-      //   const task = await this.tasksService.getTasksPerProjectId(
-      //     projects[i].id,
-      //   );
-      //   tasksCollection.push(task);
-      //   console.log(tasksCollection, '===tasksCollection');
-      // }
 
       const commentsCollection =
         await this.commentsService.findCommentsByAssignmentId(idString);
@@ -238,7 +217,6 @@ export class ProjectsService {
   }
 
   async getProjectsByProjectManagerId(id: string, limiter: number) {
-    console.log(id, '===id getProjectsByProjectManagerId');
     const projects = await this.projectModel
       .find({
         project_manager_id: {
@@ -246,8 +224,6 @@ export class ProjectsService {
         },
       })
       .exec();
-
-    console.log(projects, '===projects');
 
     const projectsCollection = [];
     for (let i = 0; i < projects.length; i++) {
@@ -262,7 +238,6 @@ export class ProjectsService {
           5,
         );
         tasksCollection.push(task);
-        console.log(tasksCollection, '===tasksCollection');
       }
 
       const assignedUsersCollection = [];
@@ -310,7 +285,6 @@ export class ProjectsService {
     for (let i = 0; i < project.tasks.length; i++) {
       const task = await this.tasksService.getSingleTask(project.tasks[i], 5);
       tasksCollection.push(task);
-      console.log(tasksCollection, '===tasksCollection');
     }
 
     const projectManagerData = await this.usersService.getSingleUser(

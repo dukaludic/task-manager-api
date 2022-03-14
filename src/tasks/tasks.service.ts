@@ -65,8 +65,6 @@ export class TasksService {
       still_visible_to_worker,
     });
 
-    console.log(newTask, '===newTask');
-
     const result = await newTask.save();
     return result.id as string;
   }
@@ -147,7 +145,6 @@ export class TasksService {
   // }
 
   async getTasksPerProjectId(id: string) {
-    console.log(id, '====getTaskPerProjectId id');
     const tasks = await this.taskModel
       .find({
         project_id: {
@@ -270,7 +267,6 @@ export class TasksService {
   }
 
   async getSingleTask(id: string, limiter: number) {
-    console.log(id, '==id');
     const task = await this.taskModel
       .findOne({
         _id: {
@@ -290,12 +286,10 @@ export class TasksService {
     const commentsCollection =
       await this.commentsService.findCommentsByAssignmentId(id);
 
-    console.log('task', task);
     const assignedUsersCollection = [];
     for (let j = 0; j < task?.assigned_users.length; j++) {
-      const user = await this.usersService.getSingleUserForProjects(
+      const user = await this.usersService.getUserBasicInfo(
         task?.assigned_users[j],
-        5,
       );
 
       assignedUsersCollection.push(user);
@@ -303,9 +297,8 @@ export class TasksService {
 
     let approvedByData;
     if (task?.approved_by) {
-      approvedByData = await this.usersService.getSingleUserForProjects(
+      approvedByData = await this.usersService.getUserBasicInfo(
         task?.approved_by,
-        5,
       );
     }
 
@@ -409,7 +402,7 @@ export class TasksService {
         },
       })
       .exec();
-    console.log(result);
+
     if (result.deletedCount === 1) {
       return id;
     }

@@ -53,7 +53,6 @@ export class ProjectsController {
 
   @Get()
   async getAllProjects() {
-    console.log('getAllProjects');
     const projects = await this.projectsService.getProjects(10);
     return projects;
   }
@@ -96,7 +95,6 @@ export class ProjectsController {
     @Body('status') status: string,
     @Body('description') description: string,
   ) {
-    console.log(id, '==id');
     const result = await this.projectsService.updateProject(
       id,
       title,

@@ -14,8 +14,6 @@ export class AuthService {
     // Find if user in database
     const user = await this.usersService.findUserByUsername(username);
 
-    console.log(user, '===user');
-
     // If user exists and passwords match return the user object without the username and password
     if (user && user.password === password) {
       const { password, username, ...rest } = user;

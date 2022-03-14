@@ -39,7 +39,6 @@ export class SubtasksController {
 
   @Get()
   async getAllSubtasks(@Request() req) {
-    console.log('getAllSubtasks');
     const subtasks = await this.subtasksService.getSubtasks(5);
     return subtasks;
   }
@@ -56,7 +55,6 @@ export class SubtasksController {
     @Body('content') content: string,
     @Body('done') done: boolean,
   ) {
-    console.log(id, '==id');
     const result = await this.subtasksService.updateSubtask(
       id,
       task_id,

@@ -25,8 +25,6 @@ export class CommentsassignedService {
       assignment_id,
     });
 
-    console.log(newCommentassigned, '===newCommentassigned');
-
     const result = await newCommentassigned.save();
     return result.id as string;
   }

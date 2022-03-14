@@ -25,8 +25,6 @@ export class UserprojectService {
       user_id,
     });
 
-    console.log(newUserproject, '===newUserproject');
-
     const result = await newUserproject.save();
     return result.id as string;
   }
@@ -44,14 +42,11 @@ export class UserprojectService {
   }
 
   async getUserprojectsPerUserId(id: string) {
-    console.log(id, '==id');
     const userprojects = await this.userprojectModel.find({
       user_id: {
         $in: id,
       },
     });
-
-    console.log(userprojects, '===userprojects');
 
     return userprojects;
   }

@@ -26,6 +26,9 @@ export const EventSchema = new mongoose.Schema(
   { versionKey: false },
 );
 
+//dobijaju juzeri koji su assignovani na projekat, smisliti jos
+//user mora ima svoju instancu notifikacije
+
 export interface Event extends mongoose.Document {
   user_id: string;
   operation: string;

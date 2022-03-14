@@ -11,6 +11,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { User } from './user.model';
+import { Project } from '../projects/project.model';
 import { UserprojectService } from '../userproject/userproject.service';
 import { ProjectsService } from '../projects/projects.service';
 import { ImagesService } from 'src/images/images.service';
@@ -21,6 +22,7 @@ import { EventsService } from '../events/events.service';
 export class UsersService {
   constructor(
     @InjectModel('User') private readonly userModel: Model<User>,
+    @InjectModel('Project') private readonly projectModel: Model<Project>,
     private userprojectService: UserprojectService,
     private projectsService: ProjectsService,
     private imagesService: ImagesService,
@@ -48,8 +50,6 @@ export class UsersService {
       profile_picture,
     });
 
-    console.log(newUser, '===newUser');
-
     const result = await newUser.save();
     return result.id as string;
   }
@@ -61,8 +61,6 @@ export class UsersService {
 
   //For auth
   async findUserByUsername(username: string): Promise<User | undefined> {
-    console.log(username, '===username', typeof username);
-
     const user = await this.userModel
       .findOne({
         username: {
@@ -71,15 +69,12 @@ export class UsersService {
       })
       .exec();
 
-    console.log(user, '===user 1');
-
     return user;
   }
 
   async findOne(username: string): Promise<User | undefined> {
     // return this.users.find((user) => user.username === username);
 
-    console.log('username', username);
     const usernameString = username.toString();
 
     const user = this.userModel.findOne({
@@ -87,8 +82,6 @@ export class UsersService {
         $eq: usernameString,
       },
     });
-
-    // console.log(user, '===user in users.service');
 
     return user;
   }
@@ -141,11 +134,8 @@ export class UsersService {
         const userprojects =
           await this.userprojectService.getUserprojectsPerUserId(idString);
 
-        console.log(userprojects, '===userprojects');
-
         //get collection
         for (let i = 0; i < userprojects.length; i++) {
-          console.log(userprojects[i].project_id, 'userprojects[i].project_id');
           const project = await this.projectsService.getSingleProject(
             userprojects[i].project_id,
             5,
@@ -159,8 +149,6 @@ export class UsersService {
         projectsCollection.push([projects]);
       }
 
-      console.log(projectsCollection, '===projectsCollection');
-
       const data = {
         id: users[i]._id,
         first_name: users[i].first_name,
@@ -172,8 +160,6 @@ export class UsersService {
         projects: projectsCollection,
         profile_picture: users[i].profile_picture,
       };
-
-      console.log(data, '===data');
 
       usersCollection.push(data);
     }
@@ -194,8 +180,6 @@ export class UsersService {
       await this.imagesassignedService.getSingleImageassignedByAssignmentId(
         user?.id,
       );
-
-    console.log(profileImageAssigned, '===profileImageAssigned');
 
     const profileImage = await this.imagesService.getSingleImage(
       profileImageAssigned?.image_id,
@@ -238,12 +222,27 @@ export class UsersService {
     return user;
   }
 
-  async getUsersBasicInfoByTaskId(id: string, limiter: number) {
-    
+  async getUsersBasicInfoByTaskId(id: string, limiter: number) {}
+
+  async getUsersByProjectId(id: string) {
+    const project = await this.projectsService.getProjectBasicInfo(id);
+
+    const assignedUsersIds = [
+      project.project_manager,
+      ...project.assigned_users,
+    ];
+    // for (let i = 0; i < project[assigned_users].length; i++) {}
+
+    const usersData = [];
+    for (let i = 0; i < assignedUsersIds.length; i++) {
+      const user = await this.getUserBasicInfo(assignedUsersIds[i]);
+      usersData.push(user);
+    }
+
+    return usersData;
   }
 
   async getSingleUserForProjects(id: string, limiter: number) {
-    console.log(id, '==id 12311111111111111111111111');
     const user = await this.userModel
       .findOne({
         _id: {
@@ -251,8 +250,6 @@ export class UsersService {
         },
       })
       .exec();
-
-    console.log(user, '===user');
 
     const data = {
       id: user.id,
@@ -281,12 +278,9 @@ export class UsersService {
       id,
     );
 
-    console.log(userprojects, '===userprojects');
-
     //get collection
     const projectsCollection = [];
     for (let i = 0; i < userprojects.length; i++) {
-      console.log(userprojects[i].project_id, 'userprojects[i].project_id');
       const project = await this.projectsService.getSingleProject(
         userprojects[i].project_id,
         5,

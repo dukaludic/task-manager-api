@@ -42,7 +42,6 @@ export class SettingsController {
 
   @Get()
   async getAllSettings(@Request() req) {
-    console.log('getAllSettings');
     const settings = await this.settingsService.getSettings(5);
     return settings;
   }

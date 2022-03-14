@@ -50,14 +50,12 @@ export class EventsController {
 
   @Get()
   async getAllEvents(@Request() req) {
-    console.log('getAllEvents');
     const events = await this.eventsService.getEvents(5);
     return events;
   }
 
   @Get('user/:id')
   async getPerUserId(@Request() req, @Param('id') id: string) {
-    console.log('getAllEvents');
     const events = await this.eventsService.getEventsPerUserId(id);
     return events;
   }

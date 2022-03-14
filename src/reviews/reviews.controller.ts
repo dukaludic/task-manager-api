@@ -55,7 +55,6 @@ export class ReviewsController {
 
   @Get()
   async getAllReviews(@Request() req) {
-    console.log('getAllReviews');
     const reviews = await this.reviewsService.getReviews(5);
     return reviews;
   }
@@ -77,7 +76,6 @@ export class ReviewsController {
     @Body('assignee_id') assignee_id: string,
     @Body('project_id') project_id: string,
   ) {
-    console.log(id, '==id');
     const result = await this.reviewsService.updateReview(
       id,
       task_id,

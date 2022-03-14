@@ -28,7 +28,6 @@ export class UsersController {
     @Body('role') role: string,
     @Body('profile_picture') profile_picture: string,
   ) {
-    console.log(first_name, last_name, email);
     const result = await this.usersService.insertUser(
       first_name,
       last_name,
@@ -49,7 +48,6 @@ export class UsersController {
 
   @Get()
   async getAllUsers(@Request() req) {
-    console.log('getAllUsers');
     const users = await this.usersService.getUsers(5);
     return users;
   }
@@ -58,6 +56,11 @@ export class UsersController {
   async getAllUserNames() {
     const users = await this.usersService.getUserNamesAndRoles();
     return users;
+  }
+
+  @Get('project/:id')
+  async getUsersByProjectId(@Param('id') id: string) {
+    return await this.usersService.getUsersByProjectId(id);
   }
 
   @Get('single/:id')

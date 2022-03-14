@@ -25,8 +25,6 @@ export class SettingsService {
       value,
     });
 
-    console.log(newSetting, '===newSetting');
-
     const result = await newSetting.save();
     return result.id as string;
   }

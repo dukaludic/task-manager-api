@@ -2,6 +2,7 @@ import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { UserSchema } from './user.model';
+import { ProjectSchema } from '../projects/project.model';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { UserprojectModule } from 'src/userproject/userproject.module';
@@ -13,7 +14,10 @@ import { EventsModule } from 'src/events/events.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: 'User', schema: UserSchema },
+      { name: 'Project', schema: ProjectSchema },
+    ]),
     UserprojectModule,
     ProjectsModule,
     AuthModule,

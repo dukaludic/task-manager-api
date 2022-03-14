@@ -12,10 +12,14 @@ import { Model } from 'mongoose';
 
 import { Image } from './image.model';
 
+import { ImagesassignedService } from 'src/imagesassigned/imagesassigned.service';
+
 @Injectable()
 export class ImagesService {
   constructor(
     @InjectModel('Image') private readonly imageModel: Model<Image>,
+    @Inject(forwardRef(() => ImagesassignedService))
+    private ImagesassignedService: ImagesassignedService,
   ) {}
 
   async insertImage(file_url: string, base_64: string) {
@@ -23,8 +27,6 @@ export class ImagesService {
       file_url,
       base_64,
     });
-
-    console.log(newImage, '===newImage');
 
     const result = await newImage.save();
     return result.id as string;
@@ -48,7 +50,6 @@ export class ImagesService {
         },
       })
       .exec();
-    console.log(image, '===image');
 
     return image;
   }
@@ -66,8 +67,16 @@ export class ImagesService {
     return updatedImage;
   }
 
-  async deleteImage(imageId: string) {
-    const result = await this.imageModel.deleteOne({ id: imageId }).exec();
+  async deleteImage(id: string) {
+    const imageassigned =
+      await this.ImagesassignedService.getImagesassignedByImageId(id);
+
+    console.log(imageassigned, 'imageassigned');
+
+    const deleteImageassigned =
+      await this.ImagesassignedService.deleteImageassigned(imageassigned?._id);
+
+    const result = await this.imageModel.deleteOne({ _id: { $eq: id } }).exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };

@@ -35,8 +35,6 @@ export class CommentsService {
       assignment_id,
     });
 
-    console.log(newComment, '===newComment');
-
     const result = await newComment.save();
     return result.id as string;
   }
