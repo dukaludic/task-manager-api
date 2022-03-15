@@ -51,7 +51,7 @@ export class UsersService {
     });
 
     const result = await newUser.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async insertBulkUsers(multipleUsers: any[]) {
@@ -112,7 +112,7 @@ export class UsersService {
     const usersCollection = [];
     for (let i = 0; i < users.length; i++) {
       usersCollection.push({
-        id: users[i].id,
+        _id: users[i]._id,
         first_name: users[i].first_name,
         last_name: users[i].last_name,
         role: users[i].role,
@@ -150,7 +150,7 @@ export class UsersService {
       }
 
       const data = {
-        id: users[i]._id,
+        _id: users[i]._id,
         first_name: users[i].first_name,
         last_name: users[i].last_name,
         username: users[i].username,
@@ -167,18 +167,18 @@ export class UsersService {
     return usersCollection;
   }
 
-  async getUserBasicInfo(id: string) {
+  async getUserBasicInfo(_id: string) {
     const user = await this.userModel
       .findOne({
         _id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
 
     const profileImageAssigned =
       await this.imagesassignedService.getSingleImageassignedByAssignmentId(
-        user?.id,
+        user?._id,
       );
 
     const profileImage = await this.imagesService.getSingleImage(
@@ -186,7 +186,7 @@ export class UsersService {
     );
 
     const data = {
-      id: user?.id,
+      _id: user?._id,
       first_name: user?.first_name,
       last_name: user?.last_name,
       username: user?.username,
@@ -198,11 +198,11 @@ export class UsersService {
     return data;
   }
 
-  async getSingleUserForComments(id: string, limiter: number) {
+  async getSingleUserForComments(_id: string, limiter: number) {
     const user = await this.userModel
       .findOne({
         _id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
@@ -210,11 +210,11 @@ export class UsersService {
     return user;
   }
 
-  async getSingleUserForEvents(id: string, limiter: number) {
+  async getSingleUserForEvents(_id: string, limiter: number) {
     const user = await this.userModel
       .findOne({
         _id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
@@ -222,10 +222,10 @@ export class UsersService {
     return user;
   }
 
-  async getUsersBasicInfoByTaskId(id: string, limiter: number) {}
+  async getUsersBasicInfoByTaskId(_id: string, limiter: number) {}
 
-  async getUsersByProjectId(id: string) {
-    const project = await this.projectsService.getProjectBasicInfo(id);
+  async getUsersByProjectId(_id: string) {
+    const project = await this.projectsService.getProjectBasicInfo(_id);
 
     const assignedUsersIds = [
       project.project_manager,
@@ -242,17 +242,17 @@ export class UsersService {
     return usersData;
   }
 
-  async getSingleUserForProjects(id: string, limiter: number) {
+  async getSingleUserForProjects(_id: string, limiter: number) {
     const user = await this.userModel
       .findOne({
         _id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
 
     const data = {
-      id: user.id,
+      _id: user._id,
       first_name: user?.first_name,
       last_name: user?.last_name,
       username: user?.username,
@@ -264,18 +264,18 @@ export class UsersService {
     return data;
   }
 
-  async getSingleUser(id: string, limiter: number) {
+  async getSingleUser(_id: string, limiter: number) {
     const user = await this.userModel
       .findOne({
         _id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
 
     //get intermediary assignment array
     const userprojects = await this.userprojectService.getUserprojectsPerUserId(
-      id,
+      _id,
     );
 
     //get collection
@@ -303,7 +303,7 @@ export class UsersService {
   }
 
   async updateUser(
-    id: string,
+    _id: string,
     first_name: string,
     last_name: string,
     username: string,
@@ -312,7 +312,7 @@ export class UsersService {
     role: string,
     profile_picture: string,
   ) {
-    const updatedUser = await this.findUser(id);
+    const updatedUser = await this.findUser(_id);
     if (first_name) {
       updatedUser.first_name = first_name;
     }
@@ -340,16 +340,16 @@ export class UsersService {
   }
 
   async deleteUser(userId: string) {
-    const result = await this.userModel.deleteOne({ id: userId }).exec();
+    const result = await this.userModel.deleteOne({ _id: userId }).exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
-  private async findUser(id: string): Promise<User> {
+  private async findUser(_id: string): Promise<User> {
     let user;
     try {
-      user = await this.userModel.findById(id).exec();
+      user = await this.userModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find user.');
     }

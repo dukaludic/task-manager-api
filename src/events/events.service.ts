@@ -52,7 +52,7 @@ export class EventsService {
     });
 
     const result = await newEvent.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async insertBulkEvents(multipleEvents: any[]) {
@@ -88,7 +88,7 @@ export class EventsService {
       // const eventTargetData =
 
       const data = {
-        id: events[i].id,
+        _id: events[i]._id,
         user: userData,
         operation: events[i].operation,
         date_time: events[i].date_time,
@@ -104,10 +104,10 @@ export class EventsService {
     return eventsCollection;
   }
 
-  async getEventsPerUserId(id: string) {
-    // const user = await this.usersService.getSingleUserForEvents(id, 10);
+  async getEventsPerUserId(_id: string) {
+    // const user = await this.usersService.getSingleUserForEvents(_id, 10);
 
-    const projectIds = await this.projectsService.getProjectsIdsPerUserId(id);
+    const projectIds = await this.projectsService.getProjectsIdsPerUserId(_id);
 
     let events = [];
     for (let i = 0; i < projectIds.length; i++) {
@@ -170,11 +170,11 @@ export class EventsService {
     return events;
   }
 
-  async getSingleEvent(id: string, limiter: number) {
+  async getSingleEvent(_id: string, limiter: number) {
     const event = await this.eventModel
       .findOne({
-        id: {
-          $eq: id,
+        _id: {
+          $eq: _id,
         },
       })
       .exec();
@@ -183,7 +183,7 @@ export class EventsService {
   }
 
   async updateEvent(
-    id: string,
+    _id: string,
     user_id: string,
     operation: string,
     date_time: Date,
@@ -193,7 +193,7 @@ export class EventsService {
     event_target_id: string,
     event_target_type: string,
   ) {
-    const updatedEvent = await this.findEvent(id);
+    const updatedEvent = await this.findEvent(_id);
     if (user_id) {
       updatedEvent.user_id = user_id;
     }
@@ -224,16 +224,16 @@ export class EventsService {
   }
 
   async deleteEvent(eventId: string) {
-    const result = await this.eventModel.deleteOne({ id: eventId }).exec();
+    const result = await this.eventModel.deleteOne({ _id: eventId }).exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
-  private async findEvent(id: string): Promise<Event> {
+  private async findEvent(_id: string): Promise<Event> {
     let event;
     try {
-      event = await this.eventModel.findById(id).exec();
+      event = await this.eventModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find event.');
     }

@@ -36,7 +36,7 @@ export class CommentsService {
     });
 
     const result = await newComment.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async insertBulkComments(multipleComments: any[]) {
@@ -55,7 +55,7 @@ export class CommentsService {
       );
 
       const data = {
-        id: comments[i]._id,
+        _id: comments[i]._id,
         user: userData,
         data_time: comments[i].date_time,
         content: comments[i].content,
@@ -67,11 +67,11 @@ export class CommentsService {
     return commentsCollection;
   }
 
-  async findCommentsByAssignmentId(id: string) {
+  async findCommentsByAssignmentId(_id: string) {
     const comments = await this.commentModel
       .find({
         assignment_id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
@@ -83,7 +83,7 @@ export class CommentsService {
       );
 
       const data = {
-        id: comments[i].id,
+        _id: comments[i]._id,
         user: userData,
         date_time: comments[i].date_time,
         content: comments[i].content,
@@ -94,11 +94,11 @@ export class CommentsService {
     return commentsCollection;
   }
 
-  async getSingleComment(id: string, limiter: number) {
+  async getSingleComment(_id: string, limiter: number) {
     const comment = await this.commentModel
       .findOne({
-        id: {
-          $eq: id,
+        _id: {
+          $eq: _id,
         },
       })
       .exec();
@@ -109,7 +109,7 @@ export class CommentsService {
     );
 
     const data = {
-      id: comment._id,
+      _id: comment._id,
       user: userData,
       data_time: comment.date_time,
       content: comment.content,
@@ -120,13 +120,13 @@ export class CommentsService {
   }
 
   async updateComment(
-    id: string,
+    _id: string,
     user_id: string,
     date_time: Date,
     content: string,
     assignment_id: string,
   ) {
-    const updatedComment = await this.findComment(id);
+    const updatedComment = await this.findComment(_id);
     if (user_id) {
       updatedComment.user_id = user_id;
     }
@@ -145,16 +145,16 @@ export class CommentsService {
   }
 
   async deleteComment(commentId: string) {
-    const result = await this.commentModel.deleteOne({ id: commentId }).exec();
+    const result = await this.commentModel.deleteOne({ _id: commentId }).exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
-  private async findComment(id: string): Promise<Comment> {
+  private async findComment(_id: string): Promise<Comment> {
     let comment;
     try {
-      comment = await this.commentModel.findById(id).exec();
+      comment = await this.commentModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find comment.');
     }

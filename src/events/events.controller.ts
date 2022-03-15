@@ -39,7 +39,7 @@ export class EventsController {
       event_target_id,
       event_target_type,
     );
-    return { id: result };
+    return { _id: result };
   }
 
   @Post('/multiple')
@@ -54,20 +54,20 @@ export class EventsController {
     return events;
   }
 
-  @Get('user/:id')
-  async getPerUserId(@Request() req, @Param('id') id: string) {
-    const events = await this.eventsService.getEventsPerUserId(id);
+  @Get('user/:_id')
+  async getPerUserId(@Request() req, @Param('_id') _id: string) {
+    const events = await this.eventsService.getEventsPerUserId(_id);
     return events;
   }
 
-  @Get(':id')
-  getEventSingle(@Param('id') id: string) {
-    return this.eventsService.getSingleEvent(id, 5);
+  @Get(':_id')
+  getEventSingle(@Param('_id') _id: string) {
+    return this.eventsService.getSingleEvent(_id, 5);
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateEvent(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('user_id') user_id: string,
     @Body('operation') operation: string,
     @Body('date_time') date_time: Date,
@@ -78,7 +78,7 @@ export class EventsController {
     @Body('event_target_type') event_target_type: string,
   ) {
     const result = await this.eventsService.updateEvent(
-      id,
+      _id,
       user_id,
       operation,
       date_time,
@@ -91,9 +91,9 @@ export class EventsController {
     return result;
   }
 
-  @Delete(':id')
-  async removeEvent(@Param('id') id: string) {
-    const result = await this.eventsService.deleteEvent(id);
+  @Delete(':_id')
+  async removeEvent(@Param('_id') _id: string) {
+    const result = await this.eventsService.deleteEvent(_id);
     return result;
   }
 }

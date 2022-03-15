@@ -26,7 +26,7 @@ export class UserprojectController {
       project_id,
       user_id,
     );
-    return { id: result };
+    return { _id: result };
   }
 
   @Post('/multiple')
@@ -43,28 +43,28 @@ export class UserprojectController {
     return userproject;
   }
 
-  @Get(':id')
-  getUserprojectSingle(@Param('id') id: string) {
-    return this.userprojectService.getSingleUserproject(id, 5);
+  @Get(':_id')
+  getUserprojectSingle(@Param('_id') _id: string) {
+    return this.userprojectService.getSingleUserproject(_id, 5);
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateUserproject(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('project_id') project_id: string,
     @Body('user_id') user_id: string,
   ) {
     const result = await this.userprojectService.updateUserproject(
-      id,
+      _id,
       project_id,
       user_id,
     );
     return result;
   }
 
-  @Delete(':id')
-  async removeUserproject(@Param('id') id: string) {
-    const result = await this.userprojectService.deleteUserproject(id);
+  @Delete(':_id')
+  async removeUserproject(@Param('_id') _id: string) {
+    const result = await this.userprojectService.deleteUserproject(_id);
     return result;
   }
 }

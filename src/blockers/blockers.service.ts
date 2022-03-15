@@ -41,7 +41,7 @@ export class BlockersService {
     });
 
     const result = await newBlocker.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async insertBulkBlockers(multipleBlockers: any[]) {
@@ -54,11 +54,11 @@ export class BlockersService {
     return blockers;
   }
 
-  async getBlockersByTaskId(id: string) {
+  async getBlockersByTaskId(_id: string) {
     const blockers = await this.blockerModel
       .find({
         task_id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
@@ -66,11 +66,11 @@ export class BlockersService {
     return blockers;
   }
 
-  async getSingleBlocker(id: string, limiter: number) {
+  async getSingleBlocker(_id: string, limiter: number) {
     const blocker = await this.blockerModel
       .findOne({
         _id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
@@ -81,10 +81,10 @@ export class BlockersService {
     );
 
     const commentsCollection =
-      await this.commentsService.findCommentsByAssignmentId(id);
+      await this.commentsService.findCommentsByAssignmentId(_id);
 
     const data = {
-      id: blocker.id,
+      _id: blocker._id,
       title: blocker.title,
       task_id: blocker.task_id,
       description: blocker.description,
@@ -96,14 +96,14 @@ export class BlockersService {
   }
 
   async updateBlocker(
-    id: string,
+    _id: string,
     title: string,
     task_id: string,
     description: string,
     comments: string[],
     user_id: string,
   ) {
-    const updatedBlocker = await this.findBlocker(id);
+    const updatedBlocker = await this.findBlocker(_id);
     if (title) {
       updatedBlocker.title = title;
     }
@@ -125,16 +125,16 @@ export class BlockersService {
   }
 
   async deleteBlocker(blockerId: string) {
-    const result = await this.blockerModel.deleteOne({ id: blockerId }).exec();
+    const result = await this.blockerModel.deleteOne({ _id: blockerId }).exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
-  private async findBlocker(id: string): Promise<Blocker> {
+  private async findBlocker(_id: string): Promise<Blocker> {
     let blocker;
     try {
-      blocker = await this.blockerModel.findById(id).exec();
+      blocker = await this.blockerModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find blocker.');
     }

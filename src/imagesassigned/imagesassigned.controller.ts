@@ -27,7 +27,7 @@ export class ImagesassignedController {
       assignment_id,
       image_id,
     );
-    return { id: result };
+    return { _id: result };
   }
 
   @Post('/multiple')
@@ -49,40 +49,40 @@ export class ImagesassignedController {
     return imagesassigned;
   }
 
-  @Get('single/:id')
-  async getImageassignedSingle(@Param('id') id: string) {
-    return this.imagesassignedService.getSingleImageassigned(id, 5);
+  @Get('single/:_id')
+  async getImageassignedSingle(@Param('_id') _id: string) {
+    return this.imagesassignedService.getSingleImageassigned(_id, 5);
   }
 
-  @Get('single/assignment_id/:id')
-  async getImagesassignedByAssignmentId(@Param('id') id: string) {
+  @Get('single/assignment_id/:_id')
+  async getImagesassignedByAssignmentId(@Param('_id') _id: string) {
     return await this.imagesassignedService.getSingleImageassignedByAssignmentId(
-      id,
+      _id,
     );
   }
 
-  @Get('assignment_id/:id')
-  async getImagesByAssignmentId(@Param('id') id: string) {
-    return await this.imagesassignedService.getImagesByAssignmentId(id);
+  @Get('assignment_id/:_id')
+  async getImagesByAssignmentId(@Param('_id') _id: string) {
+    return await this.imagesassignedService.getImagesByAssignmentId(_id);
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateImageassigned(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('assignment_id') assignment_id: string,
     @Body('image_id') image_id: string,
   ) {
     const result = await this.imagesassignedService.updateImageassigned(
-      id,
+      _id,
       assignment_id,
       image_id,
     );
     return result;
   }
 
-  @Delete(':id')
-  async removeImageassigned(@Param('id') id: string) {
-    const result = await this.imagesassignedService.deleteImageassigned(id);
+  @Delete(':_id')
+  async removeImageassigned(@Param('_id') _id: string) {
+    const result = await this.imagesassignedService.deleteImageassigned(_id);
     return result;
   }
 }

@@ -29,7 +29,7 @@ export class CommentsassignedController {
       comment_id,
       assignment_id,
     );
-    return { id: result };
+    return { _id: result };
   }
 
   @Post('/multiple')
@@ -50,28 +50,30 @@ export class CommentsassignedController {
     return commentsassigned;
   }
 
-  @Get(':id')
-  getCommentassignedSingle(@Param('id') id: string) {
-    return this.commentsassignedService.getSingleCommentassigned(id, 5);
+  @Get(':_id')
+  getCommentassignedSingle(@Param('_id') _id: string) {
+    return this.commentsassignedService.getSingleCommentassigned(_id, 5);
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateCommentassigned(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('comment_id') comment_id: string,
     @Body('assignment_id') assignment_id: string,
   ) {
     const result = await this.commentsassignedService.updateCommentassigned(
-      id,
+      _id,
       comment_id,
       assignment_id,
     );
     return result;
   }
 
-  @Delete(':id')
-  async removeCommentassigned(@Param('id') id: string) {
-    const result = await this.commentsassignedService.deleteCommentassigned(id);
+  @Delete(':_id')
+  async removeCommentassigned(@Param('_id') _id: string) {
+    const result = await this.commentsassignedService.deleteCommentassigned(
+      _id,
+    );
     return result;
   }
 }

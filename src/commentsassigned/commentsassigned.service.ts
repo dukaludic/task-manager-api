@@ -26,7 +26,7 @@ export class CommentsassignedService {
     });
 
     const result = await newCommentassigned.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async insertBulkCommentsassigned(multipleCommentsassigned: any[]) {
@@ -41,11 +41,11 @@ export class CommentsassignedService {
     return commentsassigned;
   }
 
-  async getSingleCommentassigned(id: string, limiter: number) {
+  async getSingleCommentassigned(_id: string, limiter: number) {
     const commentassigned = await this.commentassignedModel
       .findOne({
-        id: {
-          $eq: id,
+        _id: {
+          $eq: _id,
         },
       })
       .exec();
@@ -54,11 +54,11 @@ export class CommentsassignedService {
   }
 
   async updateCommentassigned(
-    id: string,
+    _id: string,
     comment_id: string,
     assignment_id: string,
   ) {
-    const updatedCommentassigned = await this.findCommentassigned(id);
+    const updatedCommentassigned = await this.findCommentassigned(_id);
     if (comment_id) {
       updatedCommentassigned.comment_id = comment_id;
     }
@@ -72,17 +72,17 @@ export class CommentsassignedService {
 
   async deleteCommentassigned(commentassignedId: string) {
     const result = await this.commentassignedModel
-      .deleteOne({ id: commentassignedId })
+      .deleteOne({ _id: commentassignedId })
       .exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
-  private async findCommentassigned(id: string): Promise<Commentassigned> {
+  private async findCommentassigned(_id: string): Promise<Commentassigned> {
     let commentassigned;
     try {
-      commentassigned = await this.commentassignedModel.findById(id).exec();
+      commentassigned = await this.commentassignedModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find commentassigned.');
     }

@@ -30,7 +30,7 @@ export class ImagesassignedService {
     });
 
     const result = await newImageassigned.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async insertBulkImagesassigned(multipleImagesassigned: any[]) {
@@ -45,12 +45,12 @@ export class ImagesassignedService {
     return imagesassigned;
   }
 
-  async getImagesassignedByImageId(id: string) {
-    console.log(id, 'id');
+  async getImagesassignedByImageId(_id: string) {
+    console.log(_id, '_id');
     const imageassigned = await this.imageassignedModel
       .findOne({
         image_id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
@@ -58,11 +58,11 @@ export class ImagesassignedService {
     return imageassigned;
   }
 
-  async getSingleImageassigned(id: string, limiter: number) {
+  async getSingleImageassigned(_id: string, limiter: number) {
     const imageassigned = await this.imageassignedModel
       .findOne({
-        id: {
-          $eq: id,
+        _id: {
+          $eq: _id,
         },
       })
       .exec();
@@ -70,11 +70,11 @@ export class ImagesassignedService {
     return imageassigned;
   }
 
-  async getImagesByAssignmentId(id: string) {
+  async getImagesByAssignmentId(_id: string) {
     const imagesassigned = await this.imageassignedModel
       .find({
         assignment_id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
@@ -92,11 +92,11 @@ export class ImagesassignedService {
     return imagesCollection;
   }
 
-  async getSingleImageassignedByAssignmentId(id: string) {
+  async getSingleImageassignedByAssignmentId(_id: string) {
     const imageassigned = await this.imageassignedModel
       .findOne({
         assignment_id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
@@ -105,11 +105,11 @@ export class ImagesassignedService {
   }
 
   async updateImageassigned(
-    id: string,
+    _id: string,
     assignment_id: string,
     image_id: string,
   ) {
-    const updatedImageassigned = await this.findImageassigned(id);
+    const updatedImageassigned = await this.findImageassigned(_id);
     if (assignment_id) {
       updatedImageassigned.assignment_id = assignment_id;
     }
@@ -120,9 +120,9 @@ export class ImagesassignedService {
     return updatedImageassigned;
   }
 
-  async deleteImageassigned(id: string) {
+  async deleteImageassigned(_id: string) {
     const deletedImageassigned = await this.imageassignedModel
-      .deleteOne({ _id: { $eq: id } })
+      .deleteOne({ _id: { $eq: _id } })
       .exec();
 
     return {
@@ -130,10 +130,10 @@ export class ImagesassignedService {
     };
   }
 
-  private async findImageassigned(id: string): Promise<Imageassigned> {
+  private async findImageassigned(_id: string): Promise<Imageassigned> {
     let imageassigned;
     try {
-      imageassigned = await this.imageassignedModel.findById(id).exec();
+      imageassigned = await this.imageassignedModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find imageassigned.');
     }

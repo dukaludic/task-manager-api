@@ -29,7 +29,7 @@ export class EventsassignedService {
     });
 
     const result = await newEventassigned.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async getEventsassigned(limiter: number) {
@@ -37,11 +37,11 @@ export class EventsassignedService {
     return eventsassigned;
   }
 
-  async getSingleEventassigned(id: string) {
+  async getSingleEventassigned(_id: string) {
     const eventassigned = await this.eventassignedModel
       .findOne({
         _id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
@@ -50,11 +50,11 @@ export class EventsassignedService {
   }
 
   async updateEventassigned(
-    id: string,
+    _id: string,
     assignment_project_id: string,
     assignment_id: string,
   ) {
-    const updatedEventassigned = await this.findEventassigned(id);
+    const updatedEventassigned = await this.findEventassigned(_id);
     if (assignment_project_id) {
       updatedEventassigned.assignment_project_id = assignment_project_id;
     }
@@ -68,17 +68,17 @@ export class EventsassignedService {
 
   async deleteEventassigned(eventassignedId: string) {
     const result = await this.eventassignedModel
-      .deleteOne({ id: eventassignedId })
+      .deleteOne({ _id: eventassignedId })
       .exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
-  private async findEventassigned(id: string): Promise<Eventassigned> {
+  private async findEventassigned(_id: string): Promise<Eventassigned> {
     let eventassigned;
     try {
-      eventassigned = await this.eventassignedModel.findById(id).exec();
+      eventassigned = await this.eventassignedModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find eventassigned.');
     }

@@ -37,7 +37,7 @@ export class UsersController {
       role,
       profile_picture,
     );
-    return { id: result };
+    return { _id: result };
   }
 
   @Post('/multiple')
@@ -58,24 +58,24 @@ export class UsersController {
     return users;
   }
 
-  @Get('project/:id')
-  async getUsersByProjectId(@Param('id') id: string) {
-    return await this.usersService.getUsersByProjectId(id);
+  @Get('project/:_id')
+  async getUsersByProjectId(@Param('_id') _id: string) {
+    return await this.usersService.getUsersByProjectId(_id);
   }
 
-  @Get('single/:id')
-  async getUserSingle(@Param('id') id: string) {
-    return await this.usersService.getSingleUser(id, 5);
+  @Get('single/:_id')
+  async getUserSingle(@Param('_id') _id: string) {
+    return await this.usersService.getSingleUser(_id, 5);
   }
 
-  @Get('basic/:id')
-  async getUserBasicInfo(@Param('id') id: string) {
-    return await this.usersService.getUserBasicInfo(id);
+  @Get('basic/:_id')
+  async getUserBasicInfo(@Param('_id') _id: string) {
+    return await this.usersService.getUserBasicInfo(_id);
   }
 
-  @Get('basic/multiple/user/:id')
-  async getUsersBasicInfoByTaskId(@Param('id') id: string) {
-    // return await this.usersService.getUsersBasicInfoByTaskId(id);
+  @Get('basic/multiple/user/:_id')
+  async getUsersBasicInfoByTaskId(@Param('_id') _id: string) {
+    // return await this.usersService.getUsersBasicInfoByTaskId(_id);
   }
 
   @Get('usernames')
@@ -88,9 +88,9 @@ export class UsersController {
     return await this.usersService.getEmails();
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateUser(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('first_name') first_name: string,
     @Body('last_name') last_name: string,
     @Body('username') username: string,
@@ -100,7 +100,7 @@ export class UsersController {
     @Body('profile_picture') profile_picture: string,
   ) {
     const result = await this.usersService.updateUser(
-      id,
+      _id,
       first_name,
       last_name,
       username,
@@ -112,9 +112,9 @@ export class UsersController {
     return result;
   }
 
-  @Delete(':id')
-  async removeUser(@Param('id') id: string) {
-    const result = await this.usersService.deleteUser(id);
+  @Delete(':_id')
+  async removeUser(@Param('_id') _id: string) {
+    const result = await this.usersService.deleteUser(_id);
     return result;
   }
 }

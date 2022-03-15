@@ -26,7 +26,7 @@ export class UserprojectService {
     });
 
     const result = await newUserproject.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async insertBulkUserproject(multipleUserproject: any[]) {
@@ -41,21 +41,21 @@ export class UserprojectService {
     return userproject;
   }
 
-  async getUserprojectsPerUserId(id: string) {
+  async getUserprojectsPerUserId(_id: string) {
     const userprojects = await this.userprojectModel.find({
       user_id: {
-        $in: id,
+        $in: _id,
       },
     });
 
     return userprojects;
   }
 
-  async getSingleUserproject(id: string, limiter: number) {
+  async getSingleUserproject(_id: string, limiter: number) {
     const userproject = await this.userprojectModel
       .findOne({
-        id: {
-          $eq: id,
+        _id: {
+          $eq: _id,
         },
       })
       .exec();
@@ -63,8 +63,8 @@ export class UserprojectService {
     return userproject;
   }
 
-  async updateUserproject(id: string, project_id: string, user_id: string) {
-    const updatedUserproject = await this.findUserproject(id);
+  async updateUserproject(_id: string, project_id: string, user_id: string) {
+    const updatedUserproject = await this.findUserproject(_id);
     if (project_id) {
       updatedUserproject.project_id = project_id;
     }
@@ -78,17 +78,17 @@ export class UserprojectService {
 
   async deleteUserproject(userprojectId: string) {
     const result = await this.userprojectModel
-      .deleteOne({ id: userprojectId })
+      .deleteOne({ _id: userprojectId })
       .exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
-  private async findUserproject(id: string): Promise<Userproject> {
+  private async findUserproject(_id: string): Promise<Userproject> {
     let userproject;
     try {
-      userproject = await this.userprojectModel.findById(id).exec();
+      userproject = await this.userprojectModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find userproject.');
     }

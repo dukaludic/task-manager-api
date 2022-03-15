@@ -29,7 +29,7 @@ export class ImagesService {
     });
 
     const result = await newImage.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async insertBulkImages(multipleImages: any[]) {
@@ -42,11 +42,11 @@ export class ImagesService {
     return images;
   }
 
-  async getSingleImage(id: string) {
+  async getSingleImage(_id: string) {
     const image = await this.imageModel
       .findOne({
         _id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
@@ -54,8 +54,8 @@ export class ImagesService {
     return image;
   }
 
-  async updateImage(id: string, file_url: string, base_64: string) {
-    const updatedImage = await this.findImage(id);
+  async updateImage(_id: string, file_url: string, base_64: string) {
+    const updatedImage = await this.findImage(_id);
     if (file_url) {
       updatedImage.file_url = file_url;
     }
@@ -67,25 +67,27 @@ export class ImagesService {
     return updatedImage;
   }
 
-  async deleteImage(id: string) {
+  async deleteImage(_id: string) {
     const imageassigned =
-      await this.ImagesassignedService.getImagesassignedByImageId(id);
+      await this.ImagesassignedService.getImagesassignedByImageId(_id);
 
     console.log(imageassigned, 'imageassigned');
 
     const deleteImageassigned =
       await this.ImagesassignedService.deleteImageassigned(imageassigned?._id);
 
-    const result = await this.imageModel.deleteOne({ _id: { $eq: id } }).exec();
+    const result = await this.imageModel
+      .deleteOne({ _id: { $eq: _id } })
+      .exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
-  private async findImage(id: string): Promise<Image> {
+  private async findImage(_id: string): Promise<Image> {
     let image;
     try {
-      image = await this.imageModel.findById(id).exec();
+      image = await this.imageModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find image.');
     }

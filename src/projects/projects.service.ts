@@ -50,7 +50,7 @@ export class ProjectsService {
     });
 
     const result = await newProject.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async insertBulkProjects(multipleProjects: any[]) {
@@ -70,7 +70,7 @@ export class ProjectsService {
       const idString = projects[i]._id.toString();
 
       const tasksCollection = await this.tasksService.getTasksPerProjectId(
-        projects[i].id,
+        projects[i]._id,
       );
       const commentsCollection =
         await this.commentsService.findCommentsByAssignmentId(idString);
@@ -84,7 +84,7 @@ export class ProjectsService {
       }
 
       const data = {
-        id: projects[i].id,
+        _id: projects[i]._id,
         title: projects[i].title,
         tasks: tasksCollection,
         assigned_users: assignedUsersCollection,
@@ -101,18 +101,18 @@ export class ProjectsService {
   }
 
   //for events
-  async getProjectsIdsPerUserId(id: string) {
+  async getProjectsIdsPerUserId(_id: string) {
     const projects = await this.projectModel
       .find({
         assigned_users: {
-          $in: id,
+          $in: _id,
         },
       })
       .exec();
 
     const projectIdsCollection = [];
     for (let i = 0; i < projects.length; i++) {
-      projectIdsCollection.push(projects[i].id);
+      projectIdsCollection.push(projects[i]._id);
     }
 
     return projectIdsCollection;
@@ -124,7 +124,7 @@ export class ProjectsService {
     const projectCollection = [];
     for (let i = 0; i < projects.length; i++) {
       const project = {
-        id: projects[i].id,
+        _id: projects[i]._id,
         title: projects[i].title,
       };
       projectCollection.push(project);
@@ -132,17 +132,17 @@ export class ProjectsService {
     return projectCollection;
   }
 
-  async getProjectBasicInfo(id: string) {
+  async getProjectBasicInfo(_id: string) {
     const project = await this.projectModel
       .findOne({
-        id: {
-          $eq: id,
+        _id: {
+          $eq: _id,
         },
       })
       .exec();
 
     const data = {
-      id: project.id,
+      _id: project._id,
       title: project.title,
       project_manager: project.project_manager_id,
       assigned_users: project.assigned_users,
@@ -151,26 +151,26 @@ export class ProjectsService {
     return data;
   }
 
-  async getProjectByTaskId(id: string) {
+  async getProjectByTaskId(_id: string) {
     const project = await this.projectModel.findOne({
       tasks: {
-        $in: id,
+        $in: _id,
       },
     });
 
     return project;
   }
 
-  //{ $or: [ { assigned_users: { $in: id}, {project_manager_id: {$eq: id}} }] }
+  //{ $or: [ { assigned_users: { $in: _id}, {project_manager_id: {$eq: _id}} }] }
 
-  //{ $or: [ { assigned_users: {$in: id}}, { project_manager_id: {$eq: id} }] }
+  //{ $or: [ { assigned_users: {$in: _id}}, { project_manager_id: {$eq: _id} }] }
 
-  async getProjectsPerUserId(id: string) {
+  async getProjectsPerUserId(_id: string) {
     const projects = await this.projectModel
       .find({
         $or: [
-          { assigned_users: { $in: id } },
-          { project_manager_id: { $eq: id } },
+          { assigned_users: { $in: _id } },
+          { project_manager_id: { $eq: _id } },
         ],
       })
       .exec();
@@ -180,7 +180,7 @@ export class ProjectsService {
       const idString = projects[i]._id.toString();
 
       const tasksCollection = await this.tasksService.getTasksPerProjectId(
-        projects[i].id,
+        projects[i]._id,
       );
 
       const commentsCollection =
@@ -199,7 +199,7 @@ export class ProjectsService {
       );
 
       const data = {
-        id: projects[i].id,
+        _id: projects[i]._id,
         title: projects[i].title,
         tasks: tasksCollection,
         assigned_users: assignedUsersCollection,
@@ -216,11 +216,11 @@ export class ProjectsService {
     return projectsCollection;
   }
 
-  async getProjectsByProjectManagerId(id: string, limiter: number) {
+  async getProjectsByProjectManagerId(_id: string, limiter: number) {
     const projects = await this.projectModel
       .find({
         project_manager_id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
@@ -250,7 +250,7 @@ export class ProjectsService {
       }
 
       const data = {
-        id: projects[i]._id,
+        _id: projects[i]._id,
         title: projects[i].title,
         tasks: tasksCollection,
         assigned_users: assignedUsersCollection,
@@ -265,11 +265,11 @@ export class ProjectsService {
     return projectsCollection;
   }
 
-  async getSingleProject(id: string, limiter: number) {
+  async getSingleProject(_id: string, limiter: number) {
     const project = await this.projectModel
       .findOne({
         _id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
@@ -279,7 +279,7 @@ export class ProjectsService {
     }
 
     const commentsCollection =
-      await this.commentsService.findCommentsByAssignmentId(id);
+      await this.commentsService.findCommentsByAssignmentId(_id);
 
     const tasksCollection = [];
     for (let i = 0; i < project.tasks.length; i++) {
@@ -302,7 +302,7 @@ export class ProjectsService {
     }
 
     const data = {
-      id: project.id,
+      _id: project._id,
       title: project.title,
       tasks: tasksCollection,
       project_manager: projectManagerData,
@@ -318,7 +318,7 @@ export class ProjectsService {
   }
 
   async updateProject(
-    id: string,
+    _id: string,
     title: string,
     tasks: string[],
     project_manager_id: string,
@@ -328,7 +328,7 @@ export class ProjectsService {
     status: string,
     description: string,
   ) {
-    const updatedProject = await this.findProject(id);
+    const updatedProject = await this.findProject(_id);
     if (title) {
       updatedProject.title = title;
     }
@@ -359,16 +359,16 @@ export class ProjectsService {
   }
 
   async deleteProject(projectId: string) {
-    const result = await this.projectModel.deleteOne({ id: projectId }).exec();
+    const result = await this.projectModel.deleteOne({ _id: projectId }).exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
-  private async findProject(id: string): Promise<Project> {
+  private async findProject(_id: string): Promise<Project> {
     let project;
     try {
-      project = await this.projectModel.findById(id).exec();
+      project = await this.projectModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find project.');
     }

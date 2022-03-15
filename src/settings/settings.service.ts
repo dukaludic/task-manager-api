@@ -26,7 +26,7 @@ export class SettingsService {
     });
 
     const result = await newSetting.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async insertBulkSettings(multipleSettings: any[]) {
@@ -39,11 +39,11 @@ export class SettingsService {
     return settings;
   }
 
-  async getSingleSetting(id: string, limiter: number) {
+  async getSingleSetting(_id: string, limiter: number) {
     const setting = await this.settingModel
       .findOne({
-        id: {
-          $eq: id,
+        _id: {
+          $eq: _id,
         },
       })
       .exec();
@@ -52,12 +52,12 @@ export class SettingsService {
   }
 
   async updateSetting(
-    id: string,
+    _id: string,
     user_id: string,
     name: string,
     value: string,
   ) {
-    const updatedSetting = await this.findSetting(id);
+    const updatedSetting = await this.findSetting(_id);
     if (user_id) {
       updatedSetting.user_id = user_id;
     }
@@ -73,16 +73,16 @@ export class SettingsService {
   }
 
   async deleteSetting(settingId: string) {
-    const result = await this.settingModel.deleteOne({ id: settingId }).exec();
+    const result = await this.settingModel.deleteOne({ _id: settingId }).exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
-  private async findSetting(id: string): Promise<Setting> {
+  private async findSetting(_id: string): Promise<Setting> {
     let setting;
     try {
-      setting = await this.settingModel.findById(id).exec();
+      setting = await this.settingModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find setting.');
     }

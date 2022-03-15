@@ -29,7 +29,7 @@ export class SettingsController {
       name,
       value,
     );
-    return { id: result };
+    return { _id: result };
   }
 
   @Post('/multiple')
@@ -46,20 +46,20 @@ export class SettingsController {
     return settings;
   }
 
-  @Get(':id')
-  getSettingSingle(@Param('id') id: string) {
-    return this.settingsService.getSingleSetting(id, 5);
+  @Get(':_id')
+  getSettingSingle(@Param('_id') _id: string) {
+    return this.settingsService.getSingleSetting(_id, 5);
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateSetting(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('user_id') user_id: string,
     @Body('name') name: string,
     @Body('value') value: string,
   ) {
     const result = await this.settingsService.updateSetting(
-      id,
+      _id,
       user_id,
       name,
       value,
@@ -67,9 +67,9 @@ export class SettingsController {
     return result;
   }
 
-  @Delete(':id')
-  async removeSetting(@Param('id') id: string) {
-    const result = await this.settingsService.deleteSetting(id);
+  @Delete(':_id')
+  async removeSetting(@Param('_id') _id: string) {
+    const result = await this.settingsService.deleteSetting(_id);
     return result;
   }
 }

@@ -28,7 +28,7 @@ export class SubtasksController {
       content,
       done,
     );
-    return { id: result };
+    return { _id: result };
   }
 
   // @Post('/multiple')
@@ -43,20 +43,20 @@ export class SubtasksController {
     return subtasks;
   }
 
-  @Get(':id')
-  getSubtaskSingle(@Param('id') id: string) {
-    return this.subtasksService.getSingleSubtask(id, 5);
+  @Get(':_id')
+  getSubtaskSingle(@Param('_id') _id: string) {
+    return this.subtasksService.getSingleSubtask(_id, 5);
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateSubtask(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('task_id') task_id: string,
     @Body('content') content: string,
     @Body('done') done: boolean,
   ) {
     const result = await this.subtasksService.updateSubtask(
-      id,
+      _id,
       task_id,
       content,
       done,
@@ -64,9 +64,9 @@ export class SubtasksController {
     return result;
   }
 
-  @Delete(':id')
-  async removeSubtask(@Param('id') id: string) {
-    const result = await this.subtasksService.deleteSubtask(id);
+  @Delete(':_id')
+  async removeSubtask(@Param('_id') _id: string) {
+    const result = await this.subtasksService.deleteSubtask(_id);
     return result;
   }
 }

@@ -24,7 +24,7 @@ export class SubtasksService {
     });
 
     const result = await newSubtask.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async insertBulkSubtasks(multipleSubtasks: any[]) {
@@ -37,21 +37,21 @@ export class SubtasksService {
     return subtasks;
   }
 
-  async findSubtasksPerTaskId(id: string) {
+  async findSubtasksPerTaskId(_id: string) {
     const subtasks = await this.subtaskModel.find({
       task_id: {
-        $eq: id,
+        $eq: _id,
       },
     });
 
     return subtasks;
   }
 
-  async getSingleSubtask(id: string, limiter: number) {
+  async getSingleSubtask(_id: string, limiter: number) {
     const subtask = await this.subtaskModel
       .findOne({
-        id: {
-          $eq: id,
+        _id: {
+          $eq: _id,
         },
       })
       .exec();
@@ -60,12 +60,12 @@ export class SubtasksService {
   }
 
   async updateSubtask(
-    id: string,
+    _id: string,
     task_id: string,
     content: string,
     done: boolean,
   ) {
-    const updatedSubtask = await this.findSubtask(id);
+    const updatedSubtask = await this.findSubtask(_id);
     if (task_id) {
       updatedSubtask.task_id = task_id;
     }
@@ -81,16 +81,16 @@ export class SubtasksService {
   }
 
   async deleteSubtask(subtaskId: string) {
-    const result = await this.subtaskModel.deleteOne({ id: subtaskId }).exec();
+    const result = await this.subtaskModel.deleteOne({ _id: subtaskId }).exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
-  private async findSubtask(id: string): Promise<Subtask> {
+  private async findSubtask(_id: string): Promise<Subtask> {
     let subtask;
     try {
-      subtask = await this.subtaskModel.findById(id).exec();
+      subtask = await this.subtaskModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find subtask.');
     }

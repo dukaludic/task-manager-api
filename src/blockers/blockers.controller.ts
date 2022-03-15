@@ -33,7 +33,7 @@ export class BlockersController {
       comments,
       user_id,
     );
-    return { id: result };
+    return { _id: result };
   }
 
   @Post('/multiple')
@@ -50,14 +50,14 @@ export class BlockersController {
     return blockers;
   }
 
-  @Get(':id')
-  getBlockerSingle(@Param('id') id: string) {
-    return this.blockersService.getSingleBlocker(id, 5);
+  @Get(':_id')
+  getBlockerSingle(@Param('_id') _id: string) {
+    return this.blockersService.getSingleBlocker(_id, 5);
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateBlocker(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('title') title: string,
     @Body('task_id') task_id: string,
     @Body('description') description: string,
@@ -65,7 +65,7 @@ export class BlockersController {
     @Body('user_id') user_id: string,
   ) {
     const result = await this.blockersService.updateBlocker(
-      id,
+      _id,
       title,
       task_id,
       description,
@@ -75,9 +75,9 @@ export class BlockersController {
     return result;
   }
 
-  @Delete(':id')
-  async removeBlocker(@Param('id') id: string) {
-    const result = await this.blockersService.deleteBlocker(id);
+  @Delete(':_id')
+  async removeBlocker(@Param('_id') _id: string) {
+    const result = await this.blockersService.deleteBlocker(_id);
     return result;
   }
 }

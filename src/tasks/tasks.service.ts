@@ -66,7 +66,7 @@ export class TasksService {
     });
 
     const result = await newTask.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async insertBulkTasks(multipleTasks: any[]) {
@@ -111,7 +111,7 @@ export class TasksService {
       // const projectData = this.projectsService.getProjectBasicInfo()
 
       const data = {
-        id: tasks[i]._id,
+        _id: tasks[i]._id,
         title: tasks[i].title,
         project_id: tasks[i].project_id,
         assigned_users: assignedUsersCollection,
@@ -136,19 +136,19 @@ export class TasksService {
     return tasksCollection;
   }
 
-  // async getProjectByTaskId(id: string) {
-  //   // const task = await this.taskModel.findOne({ id: { $eq: id } }).exec();
+  // async getProjectByTaskId(_id: string) {
+  //   // const task = await this.taskModel.findOne({ _id: { $eq: _id } }).exec();
 
-  // project = this.projectsService.getProjectBasicInfo(id);
+  // project = this.projectsService.getProjectBasicInfo(_id);
 
   //   return project;
   // }
 
-  async getTasksPerProjectId(id: string) {
+  async getTasksPerProjectId(_id: string) {
     const tasks = await this.taskModel
       .find({
         project_id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
@@ -180,7 +180,7 @@ export class TasksService {
       );
 
       const data = {
-        id: tasks[i]._id,
+        _id: tasks[i]._id,
         title: tasks[i].title,
         project_id: tasks[i].project_id,
         assigned_users: assignedUsersCollection,
@@ -200,12 +200,12 @@ export class TasksService {
     return tasksCollection;
   }
 
-  async getTasksPerUserId(id: string) {
+  async getTasksPerUserId(_id: string) {
     const tasks = await this.taskModel
       .find({
         $or: [
-          { assigned_users: { $in: id } },
-          { project_manager_id: { $eq: id } },
+          { assigned_users: { $in: _id } },
+          { project_manager_id: { $eq: _id } },
         ],
       })
       .exec();
@@ -241,7 +241,7 @@ export class TasksService {
       }
 
       const data = {
-        id: tasks[i]._id,
+        _id: tasks[i]._id,
         title: tasks[i].title,
         project_id: tasks[i].project_id,
         assigned_users: assignedUsersCollection,
@@ -266,25 +266,25 @@ export class TasksService {
     return tasksCollection;
   }
 
-  async getSingleTask(id: string, limiter: number) {
+  async getSingleTask(_id: string, limiter: number) {
     const task = await this.taskModel
       .findOne({
         _id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
 
     const subtasksCollection = await this.subtasksService.findSubtasksPerTaskId(
-      id,
+      _id,
     );
 
     const blockersCollection = await this.blockersService.getBlockersByTaskId(
-      id,
+      _id,
     );
 
     const commentsCollection =
-      await this.commentsService.findCommentsByAssignmentId(id);
+      await this.commentsService.findCommentsByAssignmentId(_id);
 
     const assignedUsersCollection = [];
     for (let j = 0; j < task?.assigned_users.length; j++) {
@@ -303,7 +303,7 @@ export class TasksService {
     }
 
     const data = {
-      id: task?._id,
+      _id: task?._id,
       title: task?.title,
       project_id: task?.project_id,
       assigned_users: assignedUsersCollection,
@@ -326,7 +326,7 @@ export class TasksService {
   }
 
   async updateTask(
-    id: string,
+    _id: string,
     title: string,
     project_id: string,
     assigned_users: string[],
@@ -343,7 +343,7 @@ export class TasksService {
     time_sent_to_review: Date,
     still_visible_to_worker: Boolean,
   ) {
-    const updatedTask = await this.findTask(id);
+    const updatedTask = await this.findTask(_id);
     if (title) {
       updatedTask.title = title;
     }
@@ -394,25 +394,25 @@ export class TasksService {
     return updatedTask;
   }
 
-  async deleteTask(id: string) {
+  async deleteTask(_id: string) {
     const result = await this.taskModel
       .deleteOne({
         _id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
 
     if (result.deletedCount === 1) {
-      return id;
+      return _id;
     }
-    // return result.id;
+    // return result._id;
   }
 
-  private async findTask(id: string): Promise<Task> {
+  private async findTask(_id: string): Promise<Task> {
     let task;
     try {
-      task = await this.taskModel.findById(id).exec();
+      task = await this.taskModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find task.');
     }

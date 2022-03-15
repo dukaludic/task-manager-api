@@ -24,7 +24,7 @@ export class ImagesController {
     @Body('base_64') base_64: string,
   ) {
     const result = await this.imagesService.insertImage(file_url, base_64);
-    return { id: result };
+    return { _id: result };
   }
 
   @Post('/multiple')
@@ -39,24 +39,24 @@ export class ImagesController {
     return images;
   }
 
-  @Get(':id')
-  getImageSingle(@Param('id') id: string) {
-    return this.imagesService.getSingleImage(id);
+  @Get(':_id')
+  getImageSingle(@Param('_id') _id: string) {
+    return this.imagesService.getSingleImage(_id);
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateImage(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('file_url') file_url: string,
     @Body('base_64') base_64: string,
   ) {
-    const result = await this.imagesService.updateImage(id, file_url, base_64);
+    const result = await this.imagesService.updateImage(_id, file_url, base_64);
     return result;
   }
 
-  @Delete(':id')
-  async removeImage(@Param('id') id: string) {
-    const result = await this.imagesService.deleteImage(id);
+  @Delete(':_id')
+  async removeImage(@Param('_id') _id: string) {
+    const result = await this.imagesService.deleteImage(_id);
     return result;
   }
 }

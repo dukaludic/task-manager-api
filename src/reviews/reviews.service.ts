@@ -45,7 +45,7 @@ export class ReviewsService {
     });
 
     const result = await newReview.save();
-    return result.id as string;
+    return result._id as string;
   }
 
   async insertBulkReviews(multipleReviews: any[]) {
@@ -58,7 +58,7 @@ export class ReviewsService {
 
     const reviewsCollection = [];
     for (let i = 0; i < reviews.length; i++) {
-      const taskData = await this.tasksService.getSingleTask(reviews[i].id, 5);
+      const taskData = await this.tasksService.getSingleTask(reviews[i]._id, 5);
 
       const assigneeData = await this.usersService.getUserBasicInfo(
         reviews[i].assignee_id,
@@ -69,7 +69,7 @@ export class ReviewsService {
       );
 
       const data = {
-        id: reviews[i].id,
+        _id: reviews[i]._id,
         task: taskData,
         approval: reviews[i].approval,
         reviewed_by: reviewedByData,
@@ -85,18 +85,18 @@ export class ReviewsService {
     return reviewsCollection;
   }
 
-  async getReviewsPerAssigneeId(id: string) {
+  async getReviewsPerAssigneeId(_id: string) {
     const reviews = await this.reviewModel
       .find({
         assignee_id: {
-          $eq: id,
+          $eq: _id,
         },
       })
       .exec();
 
     const reviewsCollection = [];
     for (let i = 0; i < reviews.length; i++) {
-      const taskData = await this.tasksService.getSingleTask(reviews[i].id, 5);
+      const taskData = await this.tasksService.getSingleTask(reviews[i]._id, 5);
 
       const assigneeData = await this.usersService.getUserBasicInfo(
         reviews[i].assignee_id,
@@ -107,7 +107,7 @@ export class ReviewsService {
       );
 
       const data = {
-        id: reviews[i].id,
+        _id: reviews[i]._id,
         task: taskData,
         approval: reviews[i].approval,
         reviewed_by: reviewedByData,
@@ -123,21 +123,21 @@ export class ReviewsService {
     return reviewsCollection;
   }
 
-  async findReviewsPerTaskId(id) {
+  async findReviewsPerTaskId(_id) {
     const reviews = await this.reviewModel.find({
       task_id: {
-        $eq: id,
+        $eq: _id,
       },
     });
 
     return reviews;
   }
 
-  async getSingleReview(id: string, limiter: number) {
+  async getSingleReview(_id: string, limiter: number) {
     const review = await this.reviewModel
       .findOne({
-        id: {
-          $eq: id,
+        _id: {
+          $eq: _id,
         },
       })
       .exec();
@@ -145,17 +145,17 @@ export class ReviewsService {
     return review;
   }
 
-  async getReviewsByUserId(id: string) {
+  async getReviewsByUserId(_id: string) {
     const reviews = await this.reviewModel.find({
       $or: [
         {
           assignee_id: {
-            $eq: id,
+            $eq: _id,
           },
         },
         {
           reviewed_by: {
-            $eq: id,
+            $eq: _id,
           },
         },
       ],
@@ -177,7 +177,7 @@ export class ReviewsService {
       );
 
       const data = {
-        id: reviews[i].id,
+        _id: reviews[i]._id,
         task: taskData,
         approval: reviews[i].approval,
         reviewed_by: reviewedByData,
@@ -194,7 +194,7 @@ export class ReviewsService {
   }
 
   async updateReview(
-    id: string,
+    _id: string,
     task_id: string,
     approval: string,
     reviewed_by: string,
@@ -204,7 +204,7 @@ export class ReviewsService {
     assignee_id: string,
     project_id: string,
   ) {
-    const updatedReview = await this.findReview(id);
+    const updatedReview = await this.findReview(_id);
     if (task_id) {
       updatedReview.task_id = task_id;
     }
@@ -235,16 +235,16 @@ export class ReviewsService {
   }
 
   async deleteReview(reviewId: string) {
-    const result = await this.reviewModel.deleteOne({ id: reviewId }).exec();
+    const result = await this.reviewModel.deleteOne({ _id: reviewId }).exec();
     return {
       message: `Deleted ${result.deletedCount} item from database`,
     };
   }
 
-  private async findReview(id: string): Promise<Review> {
+  private async findReview(_id: string): Promise<Review> {
     let review;
     try {
-      review = await this.reviewModel.findById(id).exec();
+      review = await this.reviewModel.findById(_id).exec();
     } catch (error) {
       throw new NotFoundException('Could not find review.');
     }

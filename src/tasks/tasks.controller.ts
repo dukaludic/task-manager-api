@@ -52,7 +52,7 @@ export class TasksController {
       time_sent_to_review,
       still_visible_to_worker,
     );
-    return { id: result };
+    return { _id: result };
   }
 
   @Post('/multiple')
@@ -67,25 +67,25 @@ export class TasksController {
     return tasks;
   }
 
-  @Get(':id')
-  getTaskSingle(@Param('id') id: string) {
-    return this.tasksService.getSingleTask(id, 5);
+  @Get(':_id')
+  getTaskSingle(@Param('_id') _id: string) {
+    return this.tasksService.getSingleTask(_id, 5);
   }
 
-  @Get('user/:id')
-  async getTasksPerUser(@Param('id') id: string) {
-    const tasks = await this.tasksService.getTasksPerUserId(id);
+  @Get('user/:_id')
+  async getTasksPerUser(@Param('_id') _id: string) {
+    const tasks = await this.tasksService.getTasksPerUserId(_id);
     return tasks;
   }
 
-  // @Get('project/:id')
-  // async getProjectByTaskId(@Param('id') id: string) {
-  //   const tasks = await this.tasksService.getProjectByTaskId(id);
+  // @Get('project/:_id')
+  // async getProjectByTaskId(@Param('_id') _id: string) {
+  //   const tasks = await this.tasksService.getProjectByTaskId(_id);
   // }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateTask(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('title') title: string,
     @Body('project_id') project_id: string,
     @Body('assigned_users') assigned_users: string[],
@@ -103,7 +103,7 @@ export class TasksController {
     @Body('still_visible_to_worker') still_visible_to_worker: Boolean,
   ) {
     const result = await this.tasksService.updateTask(
-      id,
+      _id,
       title,
       project_id,
       assigned_users,
@@ -123,9 +123,9 @@ export class TasksController {
     return result;
   }
 
-  @Delete(':id')
-  async removeTask(@Param('id') id: string) {
-    const result = await this.tasksService.deleteTask(id);
+  @Delete(':_id')
+  async removeTask(@Param('_id') _id: string) {
+    const result = await this.tasksService.deleteTask(_id);
     return result;
   }
 }

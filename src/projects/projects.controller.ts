@@ -40,7 +40,7 @@ export class ProjectsController {
       status,
       description,
     );
-    return { id: result };
+    return { _id: result };
   }
 
   @Post('/multiple')
@@ -57,15 +57,15 @@ export class ProjectsController {
     return projects;
   }
 
-  @Get('user/:id')
-  async getPerUserId(@Param('id') id: string) {
-    const projects = await this.projectsService.getProjectsPerUserId(id);
+  @Get('user/:_id')
+  async getPerUserId(@Param('_id') _id: string) {
+    const projects = await this.projectsService.getProjectsPerUserId(_id);
     return projects;
   }
 
-  @Get('single/:id')
-  getProjectSingle(@Param('id') id: string) {
-    return this.projectsService.getSingleProject(id, 10);
+  @Get('single/:_id')
+  getProjectSingle(@Param('_id') _id: string) {
+    return this.projectsService.getSingleProject(_id, 10);
   }
 
   @Get('titles')
@@ -73,19 +73,19 @@ export class ProjectsController {
     return this.projectsService.getProjectTitles();
   }
 
-  @Get('basic/:id')
-  getProjectBasicInfo(@Param('id') id: string) {
-    return this.projectsService.getProjectBasicInfo(id);
+  @Get('basic/:_id')
+  getProjectBasicInfo(@Param('_id') _id: string) {
+    return this.projectsService.getProjectBasicInfo(_id);
   }
 
-  @Get('task/:id')
-  getByTaskId(@Param('id') id: string) {
-    return this.projectsService.getProjectByTaskId(id);
+  @Get('task/:_id')
+  getByTaskId(@Param('_id') _id: string) {
+    return this.projectsService.getProjectByTaskId(_id);
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateProject(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('title') title: string,
     @Body('tasks') tasks: string[],
     @Body('project_manager_id') project_manager_id: string,
@@ -96,7 +96,7 @@ export class ProjectsController {
     @Body('description') description: string,
   ) {
     const result = await this.projectsService.updateProject(
-      id,
+      _id,
       title,
       tasks,
       project_manager_id,
@@ -109,9 +109,9 @@ export class ProjectsController {
     return result;
   }
 
-  @Delete(':id')
-  async removeProject(@Param('id') id: string) {
-    const result = await this.projectsService.deleteProject(id);
+  @Delete(':_id')
+  async removeProject(@Param('_id') _id: string) {
+    const result = await this.projectsService.deleteProject(_id);
     return result;
   }
 }

@@ -27,7 +27,7 @@ export class EventsassignedController {
       assignment_project_id,
       assignment_id,
     );
-    return { id: result };
+    return { _id: result };
   }
 
   @Get()
@@ -38,28 +38,28 @@ export class EventsassignedController {
     return eventsassigned;
   }
 
-  @Get(':id')
-  getEventassignedSingle(@Param('id') id: string) {
-    return this.eventsassignedService.getSingleEventassigned(id);
+  @Get(':_id')
+  getEventassignedSingle(@Param('_id') _id: string) {
+    return this.eventsassignedService.getSingleEventassigned(_id);
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateEventassigned(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('assignment_project_id') assignment_project_id: string,
     @Body('assignment_id') assignment_id: string,
   ) {
     const result = await this.eventsassignedService.updateEventassigned(
-      id,
+      _id,
       assignment_project_id,
       assignment_id,
     );
     return result;
   }
 
-  @Delete(':id')
-  async removeEventassigned(@Param('id') id: string) {
-    const result = await this.eventsassignedService.deleteEventassigned(id);
+  @Delete(':_id')
+  async removeEventassigned(@Param('_id') _id: string) {
+    const result = await this.eventsassignedService.deleteEventassigned(_id);
     return result;
   }
 }

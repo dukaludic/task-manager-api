@@ -38,12 +38,12 @@ export class ReviewsController {
       assignee_id,
       project_id,
     );
-    return { id: result };
+    return { _id: result };
   }
 
-  @Get('user/:id')
-  async getReviewsByUserId(@Param('id') id: string) {
-    const reviews = this.reviewsService.getReviewsByUserId(id);
+  @Get('user/:_id')
+  async getReviewsByUserId(@Param('_id') _id: string) {
+    const reviews = this.reviewsService.getReviewsByUserId(_id);
     return reviews;
   }
 
@@ -59,14 +59,14 @@ export class ReviewsController {
     return reviews;
   }
 
-  @Get(':id')
-  getReviewSingle(@Param('id') id: string) {
-    return this.reviewsService.getSingleReview(id, 5);
+  @Get(':_id')
+  getReviewSingle(@Param('_id') _id: string) {
+    return this.reviewsService.getSingleReview(_id, 5);
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateReview(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('task_id') task_id: string,
     @Body('approval') approval: string,
     @Body('reviewed_by') reviewed_by: string,
@@ -77,7 +77,7 @@ export class ReviewsController {
     @Body('project_id') project_id: string,
   ) {
     const result = await this.reviewsService.updateReview(
-      id,
+      _id,
       task_id,
       approval,
       reviewed_by,
@@ -90,9 +90,9 @@ export class ReviewsController {
     return result;
   }
 
-  @Delete(':id')
-  async removeReview(@Param('id') id: string) {
-    const result = await this.reviewsService.deleteReview(id);
+  @Delete(':_id')
+  async removeReview(@Param('_id') _id: string) {
+    const result = await this.reviewsService.deleteReview(_id);
     return result;
   }
 }

@@ -31,7 +31,7 @@ export class CommentsController {
       content,
       assignment_id,
     );
-    return { id: result };
+    return { _id: result };
   }
 
   @Post('/multiple')
@@ -48,21 +48,21 @@ export class CommentsController {
     return comments;
   }
 
-  @Get(':id')
-  getCommentSingle(@Param('id') id: string) {
-    return this.commentsService.getSingleComment(id, 5);
+  @Get(':_id')
+  getCommentSingle(@Param('_id') _id: string) {
+    return this.commentsService.getSingleComment(_id, 5);
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateComment(
-    @Param('id') id: string,
+    @Param('_id') _id: string,
     @Body('user_id') user_id: string,
     @Body('date_time') date_time: Date,
     @Body('content') content: string,
     @Body('assignment_id') assignment_id: string,
   ) {
     const result = await this.commentsService.updateComment(
-      id,
+      _id,
       user_id,
       date_time,
       content,
@@ -71,9 +71,9 @@ export class CommentsController {
     return result;
   }
 
-  @Delete(':id')
-  async removeComment(@Param('id') id: string) {
-    const result = await this.commentsService.deleteComment(id);
+  @Delete(':_id')
+  async removeComment(@Param('_id') _id: string) {
+    const result = await this.commentsService.deleteComment(_id);
     return result;
   }
 }
