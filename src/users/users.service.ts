@@ -167,6 +167,34 @@ export class UsersService {
     return usersCollection;
   }
 
+  async getAllUsersBasicInfo() {
+    const users = await this.userModel.find().exec();
+
+    const usersCollection = [];
+    for (let i = 0; i < users.length; i++) {
+      const profileImageAssigned =
+        await this.imagesassignedService.getSingleImageassignedByAssignmentId(
+          users[i]?._id,
+        );
+
+      const profileImage = await this.imagesService.getSingleImage(
+        profileImageAssigned?.image_id,
+      );
+
+      const data = {
+        _id: users[i]?._id,
+        first_name: users[i]?.first_name,
+        last_name: users[i]?.last_name,
+        username: users[i]?.username,
+        email: users[i]?.email,
+        role: users[i]?.role,
+        profile_picture: profileImage,
+      };
+      usersCollection.push(data);
+    }
+    return usersCollection;
+  }
+
   async getUserBasicInfo(_id: string) {
     const user = await this.userModel
       .findOne({

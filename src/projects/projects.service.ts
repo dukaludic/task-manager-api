@@ -287,16 +287,14 @@ export class ProjectsService {
       tasksCollection.push(task);
     }
 
-    const projectManagerData = await this.usersService.getSingleUser(
+    const projectManagerData = await this.usersService.getUserBasicInfo(
       project.project_manager_id,
-      5,
     );
 
     const assignedUsersCollection = [];
     for (let i = 0; i < project.assigned_users.length; i++) {
-      const user = await this.usersService.getSingleUserForProjects(
+      const user = await this.usersService.getUserBasicInfo(
         project.assigned_users[i],
-        5,
       );
       assignedUsersCollection.push(user);
     }

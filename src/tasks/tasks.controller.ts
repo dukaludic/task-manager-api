@@ -83,6 +83,12 @@ export class TasksController {
   //   const tasks = await this.tasksService.getProjectByTaskId(_id);
   // }
 
+  @Get('project/:_id')
+  async getTasksPerProjectId(@Param('_id') _id: string) {
+    const tasks = await this.tasksService.getTasksPerProjectId(_id);
+    return tasks;
+  }
+
   @Patch(':_id')
   async updateTask(
     @Param('_id') _id: string,

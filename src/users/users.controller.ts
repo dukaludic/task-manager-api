@@ -58,6 +58,12 @@ export class UsersController {
     return users;
   }
 
+  @Get('basic')
+  async getAllUsersBasicInfo() {
+    const users = await this.usersService.getAllUsersBasicInfo();
+    return users;
+  }
+
   @Get('project/:_id')
   async getUsersByProjectId(@Param('_id') _id: string) {
     return await this.usersService.getUsersByProjectId(_id);

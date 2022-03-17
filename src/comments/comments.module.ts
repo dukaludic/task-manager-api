@@ -5,10 +5,14 @@ import { CommentSchema } from './comment.model';
 import { CommentsController } from './comments.controller';
 import { CommentsService } from './comments.service';
 import { UsersModule } from '../users/users.module';
+import { CommentassignedSchema } from '../commentsassigned/commentassigned.model';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Comment', schema: CommentSchema }]),
+    MongooseModule.forFeature([
+      { name: 'Comment', schema: CommentSchema },
+      { name: 'Commentassigned', schema: CommentassignedSchema },
+    ]),
     forwardRef(() => UsersModule),
   ],
   controllers: [CommentsController],

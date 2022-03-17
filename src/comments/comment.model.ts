@@ -2,10 +2,10 @@ import * as mongoose from 'mongoose';
 
 export const CommentSchema = new mongoose.Schema(
   {
-    user_id: { type: String, required: true },
-    date_time: { type: String, required: true },
-    content: { type: String, required: true },
-    assignment_id: { type: String, required: true },
+    user_id: { type: String, required: false },
+    date_time: { type: String, required: false },
+    content: { type: String, required: false },
+    assignment_id: { type: String, required: false },
   },
   { versionKey: false },
 );

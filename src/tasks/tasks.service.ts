@@ -145,6 +145,7 @@ export class TasksService {
   // }
 
   async getTasksPerProjectId(_id: string) {
+    console.log(_id, '_id');
     const tasks = await this.taskModel
       .find({
         project_id: {
@@ -152,6 +153,8 @@ export class TasksService {
         },
       })
       .exec();
+
+    console.log(tasks, 'tasks');
 
     const tasksCollection = [];
     for (let i = 0; i < tasks.length; i++) {
