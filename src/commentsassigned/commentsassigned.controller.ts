@@ -12,8 +12,9 @@ import {
 } from '@nestjs/common';
 
 import { CommentsassignedService } from './commentsassigned.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('commentsassigned')
 export class CommentsassignedController {
   constructor(

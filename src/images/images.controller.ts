@@ -13,7 +13,9 @@ import {
 
 import { ImagesService } from './images.service';
 
-// @UseGuards(JwtAuthGuard)
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+
+@UseGuards(JwtAuthGuard)
 @Controller('images')
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}

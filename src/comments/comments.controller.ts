@@ -12,8 +12,9 @@ import {
 } from '@nestjs/common';
 
 import { CommentsService } from './comments.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}

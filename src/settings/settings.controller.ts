@@ -12,8 +12,9 @@ import {
 } from '@nestjs/common';
 
 import { SettingsService } from './settings.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('settings')
 export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}

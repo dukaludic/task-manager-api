@@ -12,7 +12,9 @@ import {
 } from '@nestjs/common';
 
 import { SubtasksService } from './subtasks.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('subtasks')
 export class SubtasksController {
   constructor(private readonly subtasksService: SubtasksService) {}
