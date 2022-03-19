@@ -19,6 +19,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   async addProject(
     @Body('title') title: string,
@@ -43,6 +44,7 @@ export class ProjectsController {
     return { _id: result };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/multiple')
   async addMultiple(@Body('multipleProjects') multipleProjects: any) {
     const projects = await this.projectsService.insertBulkProjects(
@@ -51,38 +53,45 @@ export class ProjectsController {
     return projects;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getAllProjects() {
     const projects = await this.projectsService.getProjects(10);
     return projects;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('user/:_id')
   async getPerUserId(@Param('_id') _id: string) {
     const projects = await this.projectsService.getProjectsPerUserId(_id);
     return projects;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('single/:_id')
   getProjectSingle(@Param('_id') _id: string) {
     return this.projectsService.getSingleProject(_id, 10);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('titles')
   getProjectTitles() {
     return this.projectsService.getProjectTitles();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('basic/:_id')
   getProjectBasicInfo(@Param('_id') _id: string) {
     return this.projectsService.getProjectBasicInfo(_id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('task/:_id')
   getByTaskId(@Param('_id') _id: string) {
     return this.projectsService.getProjectByTaskId(_id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':_id')
   async updateProject(
     @Param('_id') _id: string,
@@ -109,6 +118,7 @@ export class ProjectsController {
     return result;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':_id')
   async removeProject(@Param('_id') _id: string) {
     const result = await this.projectsService.deleteProject(_id);

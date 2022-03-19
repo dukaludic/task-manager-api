@@ -12,11 +12,13 @@ import {
 } from '@nestjs/common';
 
 import { TasksService } from './tasks.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   async addTask(
     @Body('title') title: string,
@@ -55,23 +57,27 @@ export class TasksController {
     return { _id: result };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/multiple')
   async addMultiple(@Body('multipleTasks') multipleTasks: any) {
     const tasks = await this.tasksService.insertBulkTasks(multipleTasks);
     return tasks;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getAllTasks(@Request() req) {
     const tasks = await this.tasksService.getTasks(5);
     return tasks;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':_id')
   getTaskSingle(@Param('_id') _id: string) {
     return this.tasksService.getSingleTask(_id, 5);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('user/:_id')
   async getTasksPerUser(@Param('_id') _id: string) {
     const tasks = await this.tasksService.getTasksPerUserId(_id);
@@ -83,12 +89,14 @@ export class TasksController {
   //   const tasks = await this.tasksService.getProjectByTaskId(_id);
   // }
 
+  @UseGuards(JwtAuthGuard)
   @Get('project/:_id')
   async getTasksPerProjectId(@Param('_id') _id: string) {
     const tasks = await this.tasksService.getTasksPerProjectId(_id);
     return tasks;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':_id')
   async updateTask(
     @Param('_id') _id: string,
@@ -129,6 +137,7 @@ export class TasksController {
     return result;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':_id')
   async removeTask(@Param('_id') _id: string) {
     const result = await this.tasksService.deleteTask(_id);
