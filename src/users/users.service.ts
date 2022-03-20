@@ -167,6 +167,12 @@ export class UsersService {
     return usersCollection;
   }
 
+  async getSingleUserOnlyIds(_id: string) {
+    const user = await this.userModel.findOne({ _id: { $eq: _id } });
+
+    return user;
+  }
+
   async getAllUsersBasicInfo() {
     const users = await this.userModel.find().exec();
 

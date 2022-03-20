@@ -24,7 +24,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 @Module({
   imports: [
     CacheModule.register({
-      ttl: 120,
+      ttl: 30,
     }),
     ConfigModule.forRoot(),
     CacheModule.register(),

@@ -171,7 +171,7 @@ export class ReviewsService {
         reviews[i].assignee_id,
       );
 
-      const reviewedByData = await this.usersService.getUserBasicInfo(
+      const reviewedByData = await this.usersService.getSingleUserOnlyIds(
         reviews[i].reviewed_by,
       );
 

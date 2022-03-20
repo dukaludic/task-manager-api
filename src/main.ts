@@ -3,10 +3,10 @@ import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import express from 'express';
 import * as bodyParser from 'body-parser';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
+// import {
+//   FastifyAdapter,
+//   NestFastifyApplication,
+// } from '@nestjs/platform-fastify';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
