@@ -14,7 +14,7 @@ import {
 import { ProjectsService } from './projects.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('projects')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
@@ -60,6 +60,12 @@ export class ProjectsController {
   @Get('user/:_id')
   async getPerUserId(@Param('_id') _id: string) {
     const projects = await this.projectsService.getProjectsPerUserId(_id);
+    return projects;
+  }
+
+  @Get('user/overview/:_id')
+  async getPerUserIdOverview(@Param('_id') _id: string) {
+    const projects = await this.projectsService.getPerUserIdOverview(_id);
     return projects;
   }
 

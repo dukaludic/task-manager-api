@@ -144,6 +144,37 @@ export class TasksService {
   //   return project;
   // }
 
+  async getTasksPerProjectIdOverview(_id: string) {
+    const tasks = await this.taskModel
+      .find({
+        project_id: {
+          $eq: _id,
+        },
+      })
+      .exec();
+
+    return tasks;
+  }
+
+  async getSingleTaskTitle(_id: string) {
+    const task = await this.taskModel.findOne({ _id: { $eq: _id } });
+
+    return {
+      _id: task._id,
+      title: task.title,
+    };
+  }
+
+  async getTasksTitles(_id: string) {
+    const tasks = await this.taskModel.find().exec();
+
+    const tasksCollection = tasks.map((task) => {
+      return { _id: task._id, title: task.title };
+    });
+
+    return tasksCollection;
+  }
+
   async getTasksPerProjectId(_id: string) {
     console.log(_id, '_id');
     const tasks = await this.taskModel

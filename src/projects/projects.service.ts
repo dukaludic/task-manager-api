@@ -161,9 +161,34 @@ export class ProjectsService {
     return project;
   }
 
-  //{ $or: [ { assigned_users: { $in: _id}, {project_manager_id: {$eq: _id}} }] }
+  async getPerUserIdOverview(_id: string) {
+    const projects = await this.projectModel
+      .find({
+        $or: [
+          { assigned_users: { $in: _id } },
+          { project_manager_id: { $eq: _id } },
+        ],
+      })
+      .exec();
 
-  //{ $or: [ { assigned_users: {$in: _id}}, { project_manager_id: {$eq: _id} }] }
+    const projectsCollection = [];
+    for (let i = 0; i < projects.length; i++) {
+      const tasksCollection =
+        await this.tasksService.getTasksPerProjectIdOverview(projects[i]._id);
+
+      const data = {
+        _id: projects[i]._id,
+        title: projects[i].title,
+        tasks: tasksCollection,
+        start_date: projects[i].start_date,
+        end_date: projects[i].end_date,
+        status: projects[i].status,
+        description: projects[i].description,
+      };
+      projectsCollection.push(data);
+    }
+    return projectsCollection;
+  }
 
   async getProjectsPerUserId(_id: string) {
     const projects = await this.projectModel

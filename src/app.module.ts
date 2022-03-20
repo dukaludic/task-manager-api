@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, CacheModule, CacheInterceptor } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -19,10 +19,15 @@ import { CommentsassignedModule } from './commentsassigned/commentsassigned.modu
 import { AuthModule } from './auth/auth.module';
 import { EventsassignedModule } from './eventsAssigned/eventsassigned.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
+    CacheModule.register({
+      ttl: 120,
+    }),
     ConfigModule.forRoot(),
+    CacheModule.register(),
     MongooseModule.forRoot(process.env.MONGO_DB),
     UsersModule,
     ProjectsModule,
@@ -41,6 +46,11 @@ import { ReviewsModule } from './reviews/reviews.module';
     ReviewsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
+  ],
 })
 export class AppModule {}

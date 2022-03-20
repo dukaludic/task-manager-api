@@ -163,9 +163,8 @@ export class ReviewsService {
 
     const reviewsCollection = [];
     for (let i = 0; i < reviews.length; i++) {
-      const taskData = await this.tasksService.getSingleTask(
+      const taskData = await this.tasksService.getSingleTaskTitle(
         reviews[i].task_id,
-        5,
       );
 
       const assigneeData = await this.usersService.getUserBasicInfo(
