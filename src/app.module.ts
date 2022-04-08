@@ -23,9 +23,6 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
-    CacheModule.register({
-      ttl: 1,
-    }),
     ConfigModule.forRoot(),
     CacheModule.register(),
     MongooseModule.forRoot(process.env.MONGO_DB),

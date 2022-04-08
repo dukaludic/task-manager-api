@@ -145,6 +145,18 @@ export class ReviewsService {
     return review;
   }
 
+  async getSingleReviewByTaskId(_id: string) {
+    const review = await this.reviewModel
+      .findOne({
+        task_id: {
+          $eq: _id,
+        },
+      })
+      .exec();
+
+    return review;
+  }
+
   async getReviewsByUserId(_id: string) {
     const reviews = await this.reviewModel.find({
       $or: [

@@ -46,7 +46,14 @@ export class ReviewsController {
   @Get('user/:_id')
   async getReviewsByUserId(@Param('_id') _id: string) {
     const reviews = this.reviewsService.getReviewsByUserId(_id);
+
     return reviews;
+  }
+
+  @Get('task/:_id')
+  async getSingleReviewByTaskId(@Param('_id') _id: string) {
+    const review = this.reviewsService.getSingleReviewByTaskId(_id);
+    return review;
   }
 
   // @Post('/multiple')
@@ -95,6 +102,7 @@ export class ReviewsController {
   @Delete(':_id')
   async removeReview(@Param('_id') _id: string) {
     const result = await this.reviewsService.deleteReview(_id);
+    console.log('deleting', result, _id);
     return result;
   }
 }
