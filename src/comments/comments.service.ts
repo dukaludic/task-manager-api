@@ -108,10 +108,7 @@ export class CommentsService {
       })
       .exec();
 
-    const userData = await this.usersService.getSingleUserForComments(
-      comment.user_id,
-      5,
-    );
+    const userData = await this.usersService.getUserBasicInfo(comment.user_id);
 
     const data = {
       _id: comment._id,

@@ -241,6 +241,8 @@ export class UsersService {
       })
       .exec();
 
+    // here
+
     return user;
   }
 
