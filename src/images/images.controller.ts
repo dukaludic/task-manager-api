@@ -9,13 +9,19 @@ import {
   Request,
   UseGuards,
   Put,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+
+import { FileInterceptor } from '@nestjs/platform-express';
+
+import { Express } from 'express';
 
 import { ImagesService } from './images.service';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('images')
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
@@ -27,6 +33,17 @@ export class ImagesController {
   ) {
     const result = await this.imagesService.insertImage(file_url, base_64);
     return { _id: result };
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
+
+    const uploadedImage = await this.imagesService.upload(
+      file.buffer,
+      'filename',
+    );
   }
 
   @Post('/multiple')

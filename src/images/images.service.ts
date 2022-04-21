@@ -14,6 +14,8 @@ import { Image } from './image.model';
 
 import { ImagesassignedService } from 'src/imagesassigned/imagesassigned.service';
 
+import { S3 } from 'aws-sdk';
+
 @Injectable()
 export class ImagesService {
   constructor(
@@ -21,6 +23,31 @@ export class ImagesService {
     @Inject(forwardRef(() => ImagesassignedService))
     private ImagesassignedService: ImagesassignedService,
   ) {}
+
+  async upload(image_buffer: Buffer, file_name: string) {
+    const s3 = new S3();
+
+    const upload = await s3
+      .upload({
+        Bucket: process.env.BUCKET_NAME!,
+        Body: image_buffer,
+        Key: `${uuidv4()}-${file_name}`,
+      })
+      .promise();
+
+    // console.log(s3, 'S3');
+  }
+
+  async delete(file_name: string) {
+    const s3 = new S3();
+
+    const deleteImage = await s3
+      .deleteObject({
+        Bucket: process.env.BUCKET_NAME!,
+        Key: file_name,
+      })
+      .promise();
+  }
 
   async insertImage(file_url: string, base_64: string) {
     const newImage = new this.imageModel({
