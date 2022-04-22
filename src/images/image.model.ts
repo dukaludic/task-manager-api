@@ -4,6 +4,7 @@ export const ImageSchema = new mongoose.Schema(
   {
     file_url: { type: String, required: false },
     base_64: { type: String, required: false },
+    file_name: { type: String, required: false },
   },
   { versionKey: false },
 );
@@ -11,4 +12,5 @@ export const ImageSchema = new mongoose.Schema(
 export interface Image extends mongoose.Document {
   file_url: string;
   base_64: string;
+  file_name: string;
 }

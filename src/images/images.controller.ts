@@ -27,11 +27,19 @@ export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
   @Post()
+  @UseInterceptors(FileInterceptor('file'))
   async addImage(
     @Body('file_url') file_url: string,
     @Body('base_64') base_64: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body('file_name') file_name: string,
   ) {
-    const result = await this.imagesService.insertImage(file_url, base_64);
+    const result = await this.imagesService.insertImage(
+      file_url,
+      base_64,
+      file,
+      file_name,
+    );
     return { _id: result };
   }
 
@@ -40,10 +48,7 @@ export class ImagesController {
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log(file);
 
-    const uploadedImage = await this.imagesService.upload(
-      file.buffer,
-      'filename',
-    );
+    const uploadedImage = await this.imagesService.uploadFile(file);
   }
 
   @Post('/multiple')

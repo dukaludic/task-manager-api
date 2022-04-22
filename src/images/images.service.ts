@@ -29,7 +29,7 @@ export class ImagesService {
 
     const upload = await s3
       .upload({
-        Bucket: process.env.BUCKET_NAME!,
+        Bucket: 'grapes-task-manager-storage',
         Body: image_buffer,
         Key: `${uuidv4()}-${file_name}`,
       })
@@ -49,15 +49,85 @@ export class ImagesService {
       .promise();
   }
 
-  async insertImage(file_url: string, base_64: string) {
+  // https://grapes-task-manager-storage.s3.eu-central-1.amazonaws.com/pexels-lukas-669615.jpg
+
+  async insertImage(
+    file_url: string,
+    base_64: string,
+    file: any,
+    file_name: string,
+  ) {
+    const s3 = new S3();
+
+    console.log(file, 'file_name 1');
+
+    const key = `${file_name}-${uuidv4()}`;
+    file_url = `https://${process.env.AWS_BUCKET}.s3.${process.env.AWS_REGION}/${key}`;
+
+    console.log(file_url, 'file_url');
+    console.log(file.mimetype, 'mimetype');
+
+    const upload = await s3
+      .upload({
+        Bucket: process.env.AWS_BUCKET!,
+        Body: file.buffer,
+        Key: key,
+        ACL: 'public-read',
+        ContentType: file.mimetype,
+        ContentDisposition: 'inline',
+      })
+      .promise();
+
+    // console.log(upload, 'upload');
+
     const newImage = new this.imageModel({
       file_url,
       base_64,
+      file_name,
     });
 
     const result = await newImage.save();
     return result._id as string;
   }
+
+  /////////////////////////
+
+  s3 = new S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  });
+
+  async uploadFile(file) {
+    const { originalname } = file;
+
+    await this.s3_upload(file, originalname);
+  }
+
+  async s3_upload(file, file_name) {
+    const key = `${file_name}-${uuidv4()}`;
+    const params = {
+      Bucket: process.env.AWS_BUCKET!,
+      Body: file.buffer,
+      Key: key,
+      ContentType: file.mimetype,
+      ContentDisposition: 'inline',
+      // CreateBucketConfiguration: {
+      //   LocationConstraint: 'ap-south-1',
+      // },
+    };
+
+    console.log(params);
+
+    try {
+      let s3Response = await this.s3.upload(params).promise();
+
+      console.log(s3Response);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  ///////////////////////
 
   async insertBulkImages(multipleImages: any[]) {
     const availabilities = await this.imageModel.insertMany(multipleImages);
