@@ -29,13 +29,12 @@ export class ImagesController {
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   async addImage(
-    @Body('file_url') file_url: string,
-    @Body('base_64') base_64: string,
     @UploadedFile() file: Express.Multer.File,
+    @Body('base_64') base_64: string,
     @Body('file_name') file_name: string,
   ) {
+    console.log(file, 'file');
     const result = await this.imagesService.insertImage(
-      file_url,
       base_64,
       file,
       file_name,

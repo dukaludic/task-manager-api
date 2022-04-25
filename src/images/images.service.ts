@@ -24,6 +24,11 @@ export class ImagesService {
     private ImagesassignedService: ImagesassignedService,
   ) {}
 
+  s3 = new S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  });
+
   async upload(image_buffer: Buffer, file_name: string) {
     const s3 = new S3();
 
@@ -49,36 +54,14 @@ export class ImagesService {
       .promise();
   }
 
-  // https://grapes-task-manager-storage.s3.eu-central-1.amazonaws.com/pexels-lukas-669615.jpg
-
-  async insertImage(
-    file_url: string,
-    base_64: string,
-    file: any,
-    file_name: string,
-  ) {
+  async insertImage(base_64: string, file: any, file_name: string) {
     const s3 = new S3();
 
-    console.log(file, 'file_name 1');
+    console.log(file, 'file');
 
-    const key = `${file_name}-${uuidv4()}`;
-    file_url = `https://${process.env.AWS_BUCKET}.s3.${process.env.AWS_REGION}/${key}`;
+    const { originalname } = file;
 
-    console.log(file_url, 'file_url');
-    console.log(file.mimetype, 'mimetype');
-
-    const upload = await s3
-      .upload({
-        Bucket: process.env.AWS_BUCKET!,
-        Body: file.buffer,
-        Key: key,
-        ACL: 'public-read',
-        ContentType: file.mimetype,
-        ContentDisposition: 'inline',
-      })
-      .promise();
-
-    // console.log(upload, 'upload');
+    const file_url = await this.uploadToS3(file, file_name);
 
     const newImage = new this.imageModel({
       file_url,
@@ -92,19 +75,14 @@ export class ImagesService {
 
   /////////////////////////
 
-  s3 = new S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  });
-
   async uploadFile(file) {
     const { originalname } = file;
 
-    await this.s3_upload(file, originalname);
+    await this.uploadToS3(file, originalname);
   }
 
-  async s3_upload(file, file_name) {
-    const key = `${file_name}-${uuidv4()}`;
+  async uploadToS3(file, file_name) {
+    const key = `${uuidv4()}-${file_name}`;
     const params = {
       Bucket: process.env.AWS_BUCKET!,
       Body: file.buffer,
@@ -122,6 +100,10 @@ export class ImagesService {
       let s3Response = await this.s3.upload(params).promise();
 
       console.log(s3Response);
+
+      const { Location } = s3Response;
+
+      return Location;
     } catch (e) {
       console.log(e);
     }
