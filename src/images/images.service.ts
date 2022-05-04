@@ -36,7 +36,7 @@ export class ImagesService {
       .upload({
         Bucket: 'grapes-task-manager-storage',
         Body: image_buffer,
-        Key: `${uuidv4()}-${file_name}`,
+        Key: file_name,
       })
       .promise();
 
@@ -82,7 +82,7 @@ export class ImagesService {
   }
 
   async uploadToS3(file, file_name) {
-    const key = `${uuidv4()}-${file_name}`;
+    const key = file_name;
     const params = {
       Bucket: process.env.AWS_BUCKET!,
       Body: file.buffer,

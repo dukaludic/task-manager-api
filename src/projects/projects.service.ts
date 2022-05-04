@@ -200,6 +200,8 @@ export class ProjectsService {
       })
       .exec();
 
+    console.time('Function 1');
+
     const projectsCollection = [];
     for (let i = 0; i < projects.length; i++) {
       const idString = projects[i]._id.toString();
@@ -238,6 +240,7 @@ export class ProjectsService {
 
       projectsCollection.push(data);
     }
+    console.timeEnd('end');
     return projectsCollection;
   }
 

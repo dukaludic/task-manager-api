@@ -24,7 +24,6 @@ export class AppController {
   @Post('login')
   login(@Request() req, @Res({ passthrough: true }) response: Response): any {
     const jwt = this.authService.login(req.user);
-    console.log(jwt);
     return jwt;
   }
 

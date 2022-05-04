@@ -78,8 +78,6 @@ export class CommentsService {
     //   })
     //   .exec();
 
-    console.log(_id, '_id');
-
     const commentssassigned = await this.commentassignedModel.find({
       assignment_id: { $eq: _id },
     });

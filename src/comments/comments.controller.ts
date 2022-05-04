@@ -45,7 +45,6 @@ export class CommentsController {
 
   @Get('assignment_id/:_id')
   async getCommentsByTaskId(@Param('_id') _id: string) {
-    console.log(_id, '_id');
     const comments = await this.commentsService.findCommentsByAssignmentId(_id);
     return comments;
   }

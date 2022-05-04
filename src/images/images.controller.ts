@@ -33,7 +33,6 @@ export class ImagesController {
     @Body('base_64') base_64: string,
     @Body('file_name') file_name: string,
   ) {
-    console.log(file, 'file');
     const result = await this.imagesService.insertImage(
       base_64,
       file,
@@ -45,8 +44,6 @@ export class ImagesController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-
     const uploadedImage = await this.imagesService.uploadFile(file);
   }
 

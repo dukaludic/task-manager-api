@@ -14,7 +14,7 @@ import {
 import { ImagesassignedService } from './imagesassigned.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('imagesassigned')
 export class ImagesassignedController {
   constructor(private readonly imagesassignedService: ImagesassignedService) {}
