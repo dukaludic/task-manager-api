@@ -185,53 +185,69 @@ export class TasksService {
       })
       .exec();
 
-    console.log(tasks, 'tasks');
-
     const tasksCollection = [];
     for (let i = 0; i < tasks.length; i++) {
       const idString = tasks[i]._id.toString();
-      const subtasksCollection =
-        await this.subtasksService.findSubtasksPerTaskId(idString);
 
       const assignedUsersCollection = [];
       for (let j = 0; j < tasks[i].assigned_users.length; j++) {
+        const t0 = performance.now();
         const user = await this.usersService.getUserBasicInfo(
           tasks[i].assigned_users[j],
         );
+        const t1 = performance.now();
+        console.log(`Call took ${t1 - t0} milliseconds.${i}`);
 
         assignedUsersCollection.push(user);
       }
 
-      const blockersCollection = await this.blockersService.getBlockersByTaskId(
-        idString,
-      );
+      // const blockersCollection = await this.blockersService.getBlockersByTaskId(
+      //   idString,
+      // );
 
-      const commentsCollection =
-        await this.commentsService.findCommentsByAssignmentId(idString);
+      // const commentsCollection =
+      //   await this.commentsService.findCommentsByAssignmentId(idString);
 
-      const projectBasicData = await this.projectsService.getProjectBasicInfo(
-        tasks[i].project_id,
-      );
+      // let approvedByData;
+      // if (tasks[i]?.approved_by) {
+      //   approvedByData = await this.usersService.getSingleUserForProjects(
+      //     tasks[i]?.approved_by,
+      //     5,
+      //   );
+      // }
 
       const data = {
         _id: tasks[i]._id,
         title: tasks[i].title,
         project_id: tasks[i].project_id,
         assigned_users: assignedUsersCollection,
-        sub_tasks: subtasksCollection,
         status: tasks[i].status,
-        blockers: blockersCollection,
-        comments: commentsCollection,
         description: tasks[i].description,
         created_by: tasks[i].created_by,
         creation_time: tasks[i].creation_time,
         due_date: tasks[i].due_date,
+        approved: tasks[i].approved,
+        time_approved: tasks[i].time_approved,
+        time_sent_to_review: tasks[i].time_sent_to_review,
+        still_visible_to_worker: tasks[i].still_visible_to_worker,
       };
 
       tasksCollection.push(data);
     }
 
     return tasksCollection;
+  }
+
+  async getTasksBasicInfoPerProjectId(_id: string) {
+    const tasks = await this.taskModel
+      .find({
+        project_id: {
+          $eq: _id,
+        },
+      })
+      .exec();
+
+    return tasks;
   }
 
   async getTasksPerUserId(_id: string) {
@@ -247,8 +263,6 @@ export class TasksService {
     const tasksCollection = [];
     for (let i = 0; i < tasks.length; i++) {
       const idString = tasks[i]._id.toString();
-      const subtasksCollection =
-        await this.subtasksService.findSubtasksPerTaskId(idString);
 
       const assignedUsersCollection = [];
       for (let j = 0; j < tasks[i].assigned_users.length; j++) {
@@ -259,36 +273,32 @@ export class TasksService {
         assignedUsersCollection.push(user);
       }
 
-      const blockersCollection = await this.blockersService.getBlockersByTaskId(
-        idString,
-      );
+      // const blockersCollection = await this.blockersService.getBlockersByTaskId(
+      //   idString,
+      // );
 
-      const commentsCollection =
-        await this.commentsService.findCommentsByAssignmentId(idString);
+      // const commentsCollection =
+      //   await this.commentsService.findCommentsByAssignmentId(idString);
 
-      let approvedByData;
-      if (tasks[i]?.approved_by) {
-        approvedByData = await this.usersService.getSingleUserForProjects(
-          tasks[i]?.approved_by,
-          5,
-        );
-      }
+      // let approvedByData;
+      // if (tasks[i]?.approved_by) {
+      //   approvedByData = await this.usersService.getSingleUserForProjects(
+      //     tasks[i]?.approved_by,
+      //     5,
+      //   );
+      // }
 
       const data = {
         _id: tasks[i]._id,
         title: tasks[i].title,
         project_id: tasks[i].project_id,
         assigned_users: assignedUsersCollection,
-        sub_tasks: subtasksCollection,
         status: tasks[i].status,
-        blockers: blockersCollection,
-        comments: commentsCollection,
         description: tasks[i].description,
         created_by: tasks[i].created_by,
         creation_time: tasks[i].creation_time,
         due_date: tasks[i].due_date,
         approved: tasks[i].approved,
-        approved_by: approvedByData,
         time_approved: tasks[i].time_approved,
         time_sent_to_review: tasks[i].time_sent_to_review,
         still_visible_to_worker: tasks[i].still_visible_to_worker,

@@ -215,9 +215,14 @@ export class UsersService {
         user?._id,
       );
 
+    const t0 = performance.now();
+
     const profileImage = await this.imagesService.getSingleImage(
       profileImageAssigned?.image_id,
     );
+
+    const t1 = performance.now();
+    console.log(`Call took ${t1 - t0} milliseconds in getUserBasicInfo.`);
 
     const data = {
       _id: user?._id,

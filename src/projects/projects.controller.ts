@@ -57,6 +57,12 @@ export class ProjectsController {
     return projects;
   }
 
+  @Get('projects_page')
+  async getAllProjectsForProjectsPage() {
+    const projects = await this.projectsService.getProjectsForProjectsPage();
+    return projects;
+  }
+
   @Get('user/:_id')
   async getPerUserId(@Param('_id') _id: string) {
     const projects = await this.projectsService.getProjectsPerUserId(_id);

@@ -132,6 +132,35 @@ export class ProjectsService {
     return projectCollection;
   }
 
+  async getProjectsForProjectsPage() {
+    const projects = await this.projectModel.find().exec();
+
+    const projectsCollection = [];
+    for (let i = 0; i < projects.length; i++) {
+      const tasksCollection =
+        await this.tasksService.getTasksBasicInfoPerProjectId(projects[i]._id);
+
+      const assignedUsersCollection = [];
+      for (let j = 0; j < projects[i].assigned_users.length; j++) {
+        const user = await this.usersService.getUserBasicInfo(
+          projects[i].assigned_users[j],
+        );
+        assignedUsersCollection.push(user);
+      }
+
+      const data = {
+        _id: projects[i]._id,
+        title: projects[i].title,
+        project_manager: projects[i].project_manager_id,
+        assigned_users: assignedUsersCollection,
+        tasks: tasksCollection,
+      };
+      projectsCollection.push(data);
+    }
+
+    return projectsCollection;
+  }
+
   async getProjectBasicInfo(_id: string) {
     const project = await this.projectModel
       .findOne({

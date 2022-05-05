@@ -14,7 +14,7 @@ import {
 import { TasksService } from './tasks.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
@@ -91,6 +91,12 @@ export class TasksController {
     return tasks;
   }
 
+  @Get('project/tasks/basic/:id')
+  async getTasksBasicInfoPerProjectId(@Param('_id') _id: string) {
+    const tasks = await this.tasksService.getTasksBasicInfoPerProjectId(_id);
+    return tasks;
+  }
+
   @Patch(':_id')
   async updateTask(
     @Param('_id') _id: string,
@@ -131,7 +137,6 @@ export class TasksController {
     return result;
   }
 
-  @UseGuards(JwtAuthGuard)
   @Delete(':_id')
   async removeTask(@Param('_id') _id: string) {
     const result = await this.tasksService.deleteTask(_id);
