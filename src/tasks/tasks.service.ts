@@ -189,17 +189,15 @@ export class TasksService {
     for (let i = 0; i < tasks.length; i++) {
       const idString = tasks[i]._id.toString();
 
-      const assignedUsersCollection = [];
-      for (let j = 0; j < tasks[i].assigned_users.length; j++) {
-        const t0 = performance.now();
-        const user = await this.usersService.getUserBasicInfo(
-          tasks[i].assigned_users[j],
-        );
-        const t1 = performance.now();
-        console.log(`Call took ${t1 - t0} milliseconds.${i}`);
+      // const assignedUsersCollection = [];
+      // for (let j = 0; j < tasks[i].assigned_users.length; j++) {
+      //   const t0 = performance.now();
+      //   const user = await this.usersService.getUserBasicInfo(
+      //     tasks[i].assigned_users[j],
+      //   );
 
-        assignedUsersCollection.push(user);
-      }
+      //   assignedUsersCollection.push(user);
+      // }
 
       // const blockersCollection = await this.blockersService.getBlockersByTaskId(
       //   idString,
@@ -220,7 +218,7 @@ export class TasksService {
         _id: tasks[i]._id,
         title: tasks[i].title,
         project_id: tasks[i].project_id,
-        assigned_users: assignedUsersCollection,
+        assigned_users: tasks[i].assigned_users,
         status: tasks[i].status,
         description: tasks[i].description,
         created_by: tasks[i].created_by,
@@ -264,14 +262,14 @@ export class TasksService {
     for (let i = 0; i < tasks.length; i++) {
       const idString = tasks[i]._id.toString();
 
-      const assignedUsersCollection = [];
-      for (let j = 0; j < tasks[i].assigned_users.length; j++) {
-        const user = await this.usersService.getUserBasicInfo(
-          tasks[i].assigned_users[j],
-        );
+      // const assignedUsersCollection = [];
+      // for (let j = 0; j < tasks[i].assigned_users.length; j++) {
+      //   const user = await this.usersService.getUserBasicInfo(
+      //     tasks[i].assigned_users[j],
+      //   );
 
-        assignedUsersCollection.push(user);
-      }
+      //   assignedUsersCollection.push(user);
+      // }
 
       // const blockersCollection = await this.blockersService.getBlockersByTaskId(
       //   idString,
@@ -292,7 +290,7 @@ export class TasksService {
         _id: tasks[i]._id,
         title: tasks[i].title,
         project_id: tasks[i].project_id,
-        assigned_users: assignedUsersCollection,
+        assigned_users: tasks[i].assigned_users,
         status: tasks[i].status,
         description: tasks[i].description,
         created_by: tasks[i].created_by,

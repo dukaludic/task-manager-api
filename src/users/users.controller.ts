@@ -14,7 +14,7 @@ import {
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -48,9 +48,19 @@ export class UsersController {
   }
 
   @Get()
-  async getAllUsers(@Request() req) {
+  async getAllUsers() {
     const users = await this.usersService.getUsers(5);
     return users;
+  }
+
+  @Post('check_password/:id')
+  async checkPassword(
+    @Param('id') _id: string,
+    @Body('password') password: string,
+  ) {
+    const isCorrect = await this.usersService.checkUserPassword(_id, password);
+
+    return isCorrect;
   }
 
   @Get('names')

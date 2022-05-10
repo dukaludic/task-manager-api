@@ -148,10 +148,14 @@ export class ProjectsService {
         assignedUsersCollection.push(user);
       }
 
+      const projectManagerData = await this.usersService.getUserBasicInfo(
+        projects[i].project_manager_id,
+      );
+
       const data = {
         _id: projects[i]._id,
         title: projects[i].title,
-        project_manager: projects[i].project_manager_id,
+        project_manager: projectManagerData,
         assigned_users: assignedUsersCollection,
         tasks: tasksCollection,
       };
@@ -338,11 +342,15 @@ export class ProjectsService {
     const commentsCollection =
       await this.commentsService.findCommentsByAssignmentId(_id);
 
-    const tasksCollection = [];
-    for (let i = 0; i < project.tasks.length; i++) {
-      const task = await this.tasksService.getSingleTask(project.tasks[i], 5);
-      tasksCollection.push(task);
-    }
+    const tasksCollection = await this.tasksService.getTasksPerProjectId(_id);
+    // console.log(project.tasks);
+    // for (let i = 0; i < project.tasks.length; i++) {
+    //   console.log(project.tasks[i]);
+    //   const task = await this.tasksService.getTasksPerProjectId(
+    //     project.tasks[i],
+    //   );
+    //   tasksCollection.push(task);
+    // }
 
     const projectManagerData = await this.usersService.getUserBasicInfo(
       project.project_manager_id,

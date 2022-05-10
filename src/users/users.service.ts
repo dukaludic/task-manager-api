@@ -201,6 +201,17 @@ export class UsersService {
     return usersCollection;
   }
 
+  async checkUserPassword(_id: string, password: string) {
+    const user = await this.userModel.findOne({ _id: { $eq: _id } });
+    console.log(user, password);
+
+    if (user.password === password) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   async getUserBasicInfo(_id: string) {
     const user = await this.userModel
       .findOne({
@@ -284,6 +295,7 @@ export class UsersService {
   }
 
   async getSingleUserForProjects(_id: string, limiter: number) {
+    console.log(_id, '_id');
     const user = await this.userModel
       .findOne({
         _id: {
@@ -293,7 +305,7 @@ export class UsersService {
       .exec();
 
     const data = {
-      _id: user._id,
+      _id: user?._id,
       first_name: user?.first_name,
       last_name: user?.last_name,
       username: user?.username,
