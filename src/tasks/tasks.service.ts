@@ -451,6 +451,15 @@ export class TasksService {
     // return result._id;
   }
 
+  async deleteMany(assignment_id: string) {
+    const result = await this.taskModel.deleteMany({
+      project_id: { $eq: assignment_id },
+    });
+
+    console.log(result, 'result');
+    return result;
+  }
+
   private async findTask(_id: string): Promise<Task> {
     let task;
     try {

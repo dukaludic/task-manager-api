@@ -157,6 +157,8 @@ export class ProjectsService {
         title: projects[i].title,
         project_manager: projectManagerData,
         assigned_users: assignedUsersCollection,
+        start_date: projects[i].start_date,
+        end_date: projects[i].end_date,
         tasks: tasksCollection,
       };
       projectsCollection.push(data);
@@ -422,9 +424,14 @@ export class ProjectsService {
   }
 
   async deleteProject(projectId: string) {
-    const result = await this.projectModel.deleteOne({ _id: projectId }).exec();
+    const deletedProject = await this.projectModel
+      .deleteOne({ _id: projectId })
+      .exec();
+    const deletedTasks = await this.tasksService.deleteMany(projectId);
+
+    console.log(deletedTasks);
     return {
-      message: `Deleted ${result.deletedCount} item from database`,
+      message: `Deleted ${deletedProject.deletedCount} item from database`,
     };
   }
 
