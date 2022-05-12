@@ -106,14 +106,14 @@ export class CommentsService {
       })
       .exec();
 
-    const userData = await this.usersService.getUserBasicInfo(comment.user_id);
+    const userData = await this.usersService.getUserBasicInfo(comment?.user_id);
 
     const data = {
-      _id: comment._id,
+      _id: comment?._id,
       user: userData,
-      date_time: comment.date_time,
-      content: comment.content,
-      assignment_id: comment.assignment_id,
+      date_time: comment?.date_time,
+      content: comment?.content,
+      assignment_id: comment?.assignment_id,
     };
 
     return data;

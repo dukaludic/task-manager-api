@@ -79,6 +79,8 @@ export class ImagesassignedService {
       })
       .exec();
 
+    console.log(imagesassigned);
+
     const imagesCollection = [];
 
     for (let i = 0; i < imagesassigned.length; i++) {

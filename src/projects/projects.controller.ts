@@ -53,7 +53,7 @@ export class ProjectsController {
 
   @Get()
   async getAllProjects() {
-    const projects = await this.projectsService.getProjects(10);
+    const projects = await this.projectsService.getProjects(20);
     return projects;
   }
 
